@@ -6,9 +6,10 @@ interface LinkExchangeResponse {
   expires_in: number;
 }
 
+// Exchange flexpa/link public token for an API access token. 
+// Visit https://flexpa.com/docs/sdk/api#link-exchange for more information
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const publicToken = req.query.token;
-  console.log("process.env.FLEXPA_PUBLIC_API_BASE_URL", process.env.FLEXPA_PUBLIC_API_BASE_URL)
+  const publicToken = req.query.public_token;
   if (!process.env.FLEXPA_PUBLIC_API_BASE_URL) {
     return res.status(500).send(new Error('Invalid public API base URL'));
   }

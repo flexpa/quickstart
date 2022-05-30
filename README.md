@@ -1,3 +1,27 @@
+## Prerequisites
+
+You must have a valid public and secret key for Flexpa API. Contact us [here](https://automatemedical.typeform.com/to/mtwkkY2r?typeform-source=quickstart) to obtain them.
+
+Node must be installed.
+
+## Clone the Repository
+
+First you must clone the quickstart repository. You can do this using HTTPS:
+
+```bash
+git clone https://github.com/flexpa/quickstart.git
+cd quickstart
+```
+
+Or using SSH:
+
+```bash
+git@github.com:flexpa/quickstart.git
+cd quickstart
+```
+
+## Run project
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
