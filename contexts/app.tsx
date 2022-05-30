@@ -1,7 +1,7 @@
 import React from 'react';
 
 export interface AppState {
-    flexpaJwt: string;
+    flexpaAccessToken: string;
     patient: string;
     fhirBaseURL: string;
 }
@@ -14,12 +14,12 @@ export interface AppContext {
 const AppContext = React.createContext<AppContext | undefined>(undefined);
 
 export function useAppContext() {
-    const ctx = React.useContext(AppContext);
-    if (!ctx) {
+    const context = React.useContext(AppContext);
+    if (!context) {
         throw new Error("AppContext is undefined. Make sure you're calling useAppContext inside of AppProvider.");
     }
 
-    return ctx;
+    return context;
 }
 
 interface AppProviderProps {
