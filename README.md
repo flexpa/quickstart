@@ -7,8 +7,6 @@ First, run the development server:
 ```bash
 nvm use
 
-npm run dev
-# or
 yarn dev
 ```
 
