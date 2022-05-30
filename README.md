@@ -1,6 +1,7 @@
 ## Prerequisites
 
-You must have a valid public and secret key for Flexpa API. Contact us [here](https://automatemedical.typeform.com/to/mtwkkY2r?typeform-source=quickstart) to obtain them.
+You must have valid public and secret keys for Flexpa API. Contact us [here](https://automatemedical.typeform.com/to/mtwkkY2r?typeform-source=quickstart) to obtain them.
+Once you have the API keys, you're ready to go!
 
 Node must be installed.
 
@@ -13,14 +14,22 @@ git clone https://github.com/flexpa/quickstart.git
 cd quickstart
 ```
 
-Or using SSH:
+Or by using SSH:
 
 ```bash
 git@github.com:flexpa/quickstart.git
 cd quickstart
 ```
 
-## Run project
+## Update environment variables
+
+You'll need to add your Flexpa public and secret keys to a `.env.local` file.
+Rename the file `.env.template` to `.env.local` and update the values to include your public and secret keys.
+During development, you will likely want to use the test mode keys rather than the production ones.
+
+You will also notice that the
+
+## Run the Project
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
