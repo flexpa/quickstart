@@ -10,7 +10,7 @@ const Home: NextPage = () => {
       const result = await fetch(`/api/exchange?public_token=${publicToken}`);
       const json = await result.json();
 
-      // Store the 
+      // Store the access token and patient id in the app context for easy access
       setApp({
         flexpaAccessToken: json.access_token,
         patient: `Patient/${json.patient_id}`,
@@ -49,6 +49,11 @@ const LinkHealthButton: NextPage = () => {
       Click the button below to link your health plan.
       <div className="launch-btn" onClick={() => FlexpaLink.open()}
       >
+        <span className="icon-container">
+          <svg aria-hidden="true" className="lock-icon">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+          </svg>
+        </span>
         Link your health plan
       </div>
     </div>
@@ -59,9 +64,25 @@ const LinkHealthButton: NextPage = () => {
 const LinkSuccess: NextPage<{ app: AppState }> = ({ app }) => {
   return (
     <div>
-      Success!
-      Your health plan has been linked and the access token is stored in the app context.
-      Access token {app.flexpaAccessToken}
+      <div className=''>
+        Success, your health plan has been linked!
+        The access token and patient ID are now stored in the app context.
+      </div>
+      <div className='app-context'>
+        <div className='table-heading'>Patient ID</div>
+        <div className='code'>{app.patient}</div>
+      </div>
+      <div className='app-context'>
+        <div className='table-heading'>Access Token</div>
+        <div className='code'>{app.flexpaAccessToken}</div>
+      </div>
+      <div className='instruction-heading'>
+        Now its time to retrieve a FHIR resource
+      </div>
+      <div>
+
+      </div>
+
     </div>
   )
 }

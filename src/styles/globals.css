@@ -8,6 +8,7 @@
     color: rgb(255 255 255);
     padding: 1.25em 0 1.25em 0;
     width: 100%;
+    position: relative;
 }
 
 html {
@@ -28,10 +29,59 @@ html {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
+    margin-top: 5em;
 }
 
 .link-section {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+}
+
+.app-context {
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+    max-width: 50%;
+    word-break: break-all;
+    padding: 2em 4em;
+    margin: 1em auto 1em auto;
+    align-items: center;
+    justify-content: center;
+    text-align: left;
+    border: 0 solid #e5e7eb;
+    border-radius: .5rem;
+    background-color: rgb(255 255 255);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px -1px rgba(0, 0, 0, .1);
+}
+
+.code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
+    font-size: 1em;
+    color: rgb(75 85 99)
+}
+
+
+.table-heading {
+    font-weight: 600;
+}
+
+.icon-container {
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    padding-left: 1rem;
+}
+
+.lock-icon {
+    cursor: pointer;
+    fill: none;
+    stroke-width: 2;
+    stroke: currentcolor;
+    height: 1.25em;
+    width: 1.25em;
+    color: rgb(193 253 138);
 }
