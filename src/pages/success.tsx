@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { useAppContext } from '../../contexts/app';
+import { useAppContext } from '../contexts/app';
 
 const LinkSuccess: NextPage = () => {
     const { app } = useAppContext();

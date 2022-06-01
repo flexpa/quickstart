@@ -8,7 +8,9 @@ export interface AppState {
 
 export interface AppContext {
     app: AppState | null;
-    setApp: (app: AppState) => void;
+    setApp: (app: AppState | (() => AppState)) => void;
+    isLoading: Boolean;
+    setIsLoading: (isLoading: Boolean) => void;
 }
 
 const AppContext = React.createContext<AppContext | undefined>(undefined);
@@ -28,5 +30,6 @@ interface AppProviderProps {
 
 export function AppProvider({ children }: AppProviderProps) {
     const [app, setApp] = React.useState<AppState | null>(null);
-    return <AppContext.Provider value={{ app, setApp }}>{children}</AppContext.Provider>;
+    const [isLoading, setIsLoading] = React.useState<Boolean>(false);
+    return <AppContext.Provider value={{ app, setApp, isLoading, setIsLoading }}>{children}</AppContext.Provider>;
 }

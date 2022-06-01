@@ -1,24 +1,28 @@
 import type { NextPage } from 'next'
 import FlexpaLink from '@flexpa/link'
-import { useAppContext } from '../../contexts/app';
+import { AppState, useAppContext } from '../contexts/app';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 const Home: NextPage = () => {
-  const { setApp, app } = useAppContext();
+  const { setApp, setIsLoading } = useAppContext();
   const router = useRouter();
   useEffect(() => {
     async function exchangeToken(publicToken: string) {
+      setIsLoading(true);
       const result = await fetch(`/api/exchange?public_token=${publicToken}`);
       const json = await result.json();
 
       // Store the access token and patient id in the app context for easy access
-      setApp({
-        flexpaAccessToken: json.access_token,
-        patient: `Patient/${json.patient_id}`,
-        fhirBaseURL: process.env.NEXT_PUBLIC_NEXT_PUBLIC_FHIR_BASE_URL as string,
+      setApp(() => {
+        setIsLoading(false);
+        return {
+          flexpaAccessToken: json.access_token,
+          patient: `Patient/${json.patient_id}`,
+          fhirBaseURL: process.env.NEXT_PUBLIC_NEXT_PUBLIC_FHIR_BASE_URL as string,
+        } as AppState;
       });
-      router.push("/link_success");
+      router.push("/success");
     }
 
     // Configure FlexpaLink with your publishable key and a success callback.
@@ -26,7 +30,7 @@ const Home: NextPage = () => {
       publishableKey: process.env.NEXT_PUBLIC_FLEXPA_PUBLISHABLE_KEY as string,
       onSuccess: exchangeToken,
     });
-  }, [setApp, router]);
+  }, [setApp, router, setIsLoading]);
 
   return (
     <div className='page-container'>
