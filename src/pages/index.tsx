@@ -29,7 +29,7 @@ const Home: NextPage = () => {
     <div className='page-container'>
       <div className='section-container'>
         <h1>
-          Welcome to Flexpa!
+          Flexpa Quickstart
         </h1>
       </div>
       <div className='section-container'>
@@ -75,9 +75,6 @@ const LinkSuccess: NextPage<{ app: AppState }> = ({ app }) => {
       <div className='app-context'>
         <div className='table-heading'>Access Token</div>
         <div className='code'>{app.flexpaAccessToken}</div>
-      </div>
-      <div className='instruction-heading'>
-        Now its time to retrieve a FHIR resource
       </div>
       <div>
 
