@@ -85,3 +85,34 @@ html {
     width: 1.25em;
     color: rgb(193 253 138);
 }
+
+
+.loading {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.loading-icon {
+    margin-right: 2em;
+    margin-top: 8em;
+    height: 4em;
+    width: 4em;
+    animation: spin 1s linear infinite;
+    fill: rgb(0 88 93);
+    color: rgb(164, 167, 174);
+}
+
+
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
