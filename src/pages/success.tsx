@@ -20,7 +20,7 @@ const LinkSuccess: NextPage = () => {
                 </h1>
                 <div>
                     The access token and patient ID are now stored in the AppContext.
-                    The application is ready to start making FHIR requests.
+                    The application is ready to start making FHIR resource requests.
                 </div>
             </div>
             <div>
@@ -32,10 +32,7 @@ const LinkSuccess: NextPage = () => {
                     <div className='table-heading'>Access Token</div>
                     <div className='code'>{app?.flexpaAccessToken}</div>
                 </div>
-
-
             </div>
-
         </div>
     )
 }
