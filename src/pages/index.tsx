@@ -1,10 +1,12 @@
 import type { NextPage } from 'next'
 import FlexpaLink from '@flexpa/link'
-import { AppState, useAppContext } from '../../contexts/app';
+import { useAppContext } from '../../contexts/app';
 import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 const Home: NextPage = () => {
   const { setApp, app } = useAppContext();
+  const router = useRouter();
   useEffect(() => {
     async function exchangeToken(publicToken: string) {
       const result = await fetch(`/api/exchange?public_token=${publicToken}`);
@@ -16,6 +18,7 @@ const Home: NextPage = () => {
         patient: `Patient/${json.patient_id}`,
         fhirBaseURL: process.env.NEXT_PUBLIC_NEXT_PUBLIC_FHIR_BASE_URL as string,
       });
+      router.push("/link_success");
     }
 
     // Configure FlexpaLink with your publishable key and a success callback.
@@ -23,7 +26,7 @@ const Home: NextPage = () => {
       publishableKey: process.env.NEXT_PUBLIC_FLEXPA_PUBLISHABLE_KEY as string,
       onSuccess: exchangeToken,
     });
-  }, [setApp]);
+  }, [setApp, router]);
 
   return (
     <div className='page-container'>
@@ -33,11 +36,7 @@ const Home: NextPage = () => {
         </h1>
       </div>
       <div className='section-container'>
-        {app?.flexpaAccessToken ?
-          <LinkSuccess app={app} />
-          :
-          <LinkHealthButton />
-        }
+        <LinkHealthButton />
       </div>
     </div>
   )
@@ -60,28 +59,5 @@ const LinkHealthButton: NextPage = () => {
   )
 }
 
-
-const LinkSuccess: NextPage<{ app: AppState }> = ({ app }) => {
-  return (
-    <div>
-      <div className=''>
-        Success, your health plan has been linked!
-        The access token and patient ID are now stored in the app context.
-      </div>
-      <div className='app-context'>
-        <div className='table-heading'>Patient ID</div>
-        <div className='code'>{app.patient}</div>
-      </div>
-      <div className='app-context'>
-        <div className='table-heading'>Access Token</div>
-        <div className='code'>{app.flexpaAccessToken}</div>
-      </div>
-      <div>
-
-      </div>
-
-    </div>
-  )
-}
 
 export default Home
