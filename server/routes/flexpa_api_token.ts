@@ -18,6 +18,7 @@ interface FlexpaAccessTokenBody {
  */
 router.post("/flexpa-access-token", async (req: Request, res: Response) => {
     const { publicToken } = req.body as FlexpaAccessTokenBody;
+    console.log("received")
     if (!publicToken) {
         return res.status(400).send('Invalid Flexpa public token');
     }
@@ -27,20 +28,27 @@ router.post("/flexpa-access-token", async (req: Request, res: Response) => {
     }
 
     // Call Flexpa API's exchange endpoint to exchange your `publicToken` for an `access_token` and a `patient_id`
-    const resp = await fetch(`${process.env.FLEXPA_PUBLIC_API_BASE_URL}/link/exchange`, {
-        method: "POST",
-        headers: {
-            "content-type": "application/json",
-        },
-        body: JSON.stringify({
-            public_token: publicToken,
-            secret_key: process.env.FLEXPA_API_SECRET_KEY,
-        }),
-    });
+    try {
+        const resp = await fetch(`${process.env.FLEXPA_PUBLIC_API_BASE_URL}/link/exchange`, {
+            method: "POST",
+            headers: {
+                "content-type": "application/json",
+            },
+            body: JSON.stringify({
+                public_token: publicToken,
+                secret_key: process.env.FLEXPA_API_SECRET_KEY,
+            }),
+        });
+        const { access_token: accessToken, patient_id: patientId, expires_in: expiresIn } = await resp.json() as LinkExchangeResponse;
+        console.log("response", accessToken, patientId, expiresIn)
 
-    const exchangeResponse = await resp.json() as LinkExchangeResponse;
+        res.send({ accessToken, patientId, expiresIn });
+    }
+    catch (err) {
+        console.log("err", err)
+        return;
+    }
 
-    res.send(exchangeResponse);
 });
 
 
