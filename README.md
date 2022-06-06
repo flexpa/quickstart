@@ -34,6 +34,8 @@ First, run the development server:
 ```bash
 nvm use
 
+npm install
+
 npm run dev
 ```
 
