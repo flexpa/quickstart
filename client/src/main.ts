@@ -3,6 +3,7 @@ import { FlexpaConfig, LinkExchangeResponse } from './flexpa_types';
 import displaySuccessMessage from './link_success';
 import displayCoverage from './coverage_display';
 import { Bundle, Coverage } from 'fhir/r4';
+import displayFlexpaLinkButton from './flexpa_link_button';
 
 // Let Typescript know about the FlexpaLink object from the link script
 declare const FlexpaLink: {
@@ -37,13 +38,13 @@ FlexpaLink.create({
         }
         // parse the response body
         const { accessToken, patientId, expiresIn } = await resp.json() as LinkExchangeResponse;
-        const accessTokenDiv = document.getElementById("flexpa-access-token");
-        if (!accessTokenDiv) {
+        const flexpaLinkDiv = document.getElementById("flexpa-link");
+        if (!flexpaLinkDiv) {
             console.log("div find error ") // TODO handle error nicely
             return;
         }
         // TODO - this could be cleaner 
-        accessTokenDiv.innerHTML = displaySuccessMessage({ accessToken, patientId, expiresIn })
+        flexpaLinkDiv.innerHTML = displaySuccessMessage({ accessToken, patientId, expiresIn })
 
         // using the accessToken and patientId returned from `POST /flexpa-access-token` make a request
         // to the patient's payer FHIR server through `https://api.flexpa.com/fhir`.
@@ -70,10 +71,23 @@ FlexpaLink.create({
     },
 });
 
-const button = document.getElementById("flexpa-link-btn");
-// TODO - Might be a better way to handle this
-if (button) {
-    button.addEventListener("click", () => {
+function initializePage() {
+    const flexpaLinkDiv = document.getElementById("flexpa-link");
+    if (!flexpaLinkDiv) {
+        console.error("Could not find the Flexpa Link div")
+        return;
+    }
+    flexpaLinkDiv.innerHTML = displayFlexpaLinkButton();
+
+    const linkButton = document.getElementById("flexpa-link-btn");
+    if (!linkButton) {
+        console.error("Could not find the Flexpa Link button")
+        return;
+    }
+    linkButton.addEventListener("click", () => {
         FlexpaLink.open();
     });
 }
+
+initializePage();
+
