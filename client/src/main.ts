@@ -40,6 +40,9 @@ FlexpaLink.create({
             console.log("err", err);
         }
 
+        if (!resp) {
+            return;
+        }
         // parse the response body
         const { accessToken, patientId } = await resp.json() as LinkExchangeResponse;
         const accessTokenDiv = document.getElementById("flexpa-access-token");
