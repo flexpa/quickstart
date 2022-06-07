@@ -1,22 +1,14 @@
 import './style.css'
-interface FlexpaConfig {
-    publishableKey: string;
-    onSuccess: (publicToken: string) => {};
-}
+import { FlexpaConfig, LinkExchangeResponse } from './flexpa_types';
+import displaySuccessMessage from './link_success';
+import displayCoverage from './coverage_display';
+import { Bundle, Coverage } from 'fhir/r4';
+
+// Let Typescript know about the FlexpaLink object from the link script
 declare const FlexpaLink: {
     create: (config: FlexpaConfig) => {},
     open: () => {}
 };
-
-interface LinkExchangeResponse {
-    accessToken: string;
-    patientId: string;
-    expiresIn: number;
-}
-// // TODO - Initialize the event handlers
-// const main = () => {
-//     document.getElementById("")
-// }
 
 /**
  * Event handler for flexpa link button
@@ -44,23 +36,14 @@ FlexpaLink.create({
             return;
         }
         // parse the response body
-        const { accessToken, patientId } = await resp.json() as LinkExchangeResponse;
+        const { accessToken, patientId, expiresIn } = await resp.json() as LinkExchangeResponse;
         const accessTokenDiv = document.getElementById("flexpa-access-token");
         if (!accessTokenDiv) {
             console.log("div find error ") // TODO handle error nicely
             return;
         }
         // TODO - this could be cleaner 
-        accessTokenDiv.innerHTML = `
-        <div>
-            <div> 
-                Access Token ${accessToken}
-            </div>
-            <div>
-                Patient ID
-                ${patientId}
-            </div>
-        </div>`
+        accessTokenDiv.innerHTML = displaySuccessMessage({ accessToken, patientId, expiresIn })
 
         // using the accessToken and patientId returned from `POST /flexpa-access-token` make a request
         // to the patient's payer FHIR server through `https://api.flexpa.com/fhir`.
@@ -74,30 +57,14 @@ FlexpaLink.create({
         });
 
         // parse the response body
-        const fhirBody = await fhirResp.json();
+        const fhirBody: Bundle = await fhirResp.json();
 
         // display some information coverage information
         // see https://www.hl7.org/fhir/coverage.html for available fields
-        const coverageHTMLs = fhirBody.entry.map(
-            ({ resource }) =>
-                `<dl>` +
-                `<dt>ID</dt>` +
-                `<dd>${resource.id}</dd>` +
-                `<dt>Period Start</dt>` +
-                `<dd>${resource.period?.start ?? ""}</dd>` +
-                `<dt>Period End</dt>` +
-                `<dd>${resource.period?.end ?? ""}</dd>` +
-                `<dt>Type</dt>` +
-                `<dd>${resource.type?.text ?? ""}</dd>` +
-                `<dt>Status</dt>` +
-                `<dd>${resource.status}</dd>` +
-                `<dt>Payor</dt>` +
-                `<dd>${resource.payor?.[0].display ?? ""}</dd>` +
-                `</dl>`
-        );
+        const coverageHTMLs = fhirBody?.entry?.map((entry) => displayCoverage(entry.resource as Coverage | undefined));
         const appDiv = document.getElementById("app");
 
-        if (appDiv) {
+        if (appDiv && coverageHTMLs) {
             appDiv.innerHTML = coverageHTMLs.join("\n");
         }
     },

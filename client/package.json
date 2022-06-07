@@ -8,7 +8,11 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@types/fhir": "^0.0.35",
     "typescript": "^4.5.4",
     "vite": "^2.9.9"
+  },
+  "dependencies": {
+    "fhir": "^4.11.1"
   }
 }
