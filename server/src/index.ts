@@ -1,4 +1,4 @@
-import express, { Express, Request, Response } from 'express';
+import express from 'express';
 import bodyParser from "body-parser";
 import cors from "cors";
 import routes from './routes/flexpa_api_token.js';

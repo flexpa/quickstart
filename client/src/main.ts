@@ -1,4 +1,4 @@
-import './style.css'
+import './style.css';
 import { FlexpaConfig, LinkExchangeResponse } from './flexpa_types';
 import displaySuccessMessage from './link_success';
 import displayCoverage from './coverage_display';
@@ -7,13 +7,13 @@ import displayFlexpaLinkButton from './flexpa_link_button';
 
 // Let Typescript know about the FlexpaLink object from the link script
 declare const FlexpaLink: {
-    create: (config: FlexpaConfig) => {},
-    open: () => {}
+    create: (config: FlexpaConfig) => Record<string, unknown>,
+    open: () => Record<string, unknown>
 };
 
 function initializePage() {
     if (!import.meta.env.VITE_FLEXPA_PUBLISHABLE_KEY) {
-        console.error("No publishable key found. Set VITE_FLEXPA_PUBLISHABLE_KEY in .env")
+        console.error("No publishable key found. Set VITE_FLEXPA_PUBLISHABLE_KEY in .env");
     }
     /**
      * Initialize the FlexpaLink object
@@ -46,11 +46,11 @@ function initializePage() {
             const { accessToken, patientId, expiresIn } = await resp.json() as LinkExchangeResponse;
             const flexpaLinkDiv = document.getElementById("flexpa-link");
             if (!flexpaLinkDiv) {
-                console.error("Could not find the Flexpa Link div")
+                console.error("Could not find the Flexpa Link div");
                 return;
             }
 
-            flexpaLinkDiv.innerHTML = displaySuccessMessage({ accessToken, patientId, expiresIn })
+            flexpaLinkDiv.innerHTML = displaySuccessMessage({ accessToken, patientId, expiresIn });
 
             /*  Using the accessToken and patientId returned from `POST /flexpa-access-token` make a request
                 to the patient's payer FHIR server through `https://api.flexpa.com/fhir`.
@@ -79,14 +79,14 @@ function initializePage() {
 
     const flexpaLinkDiv = document.getElementById("flexpa-link");
     if (!flexpaLinkDiv) {
-        console.error("Could not find the Flexpa Link div")
+        console.error("Could not find the Flexpa Link div");
         return;
     }
     flexpaLinkDiv.innerHTML = displayFlexpaLinkButton();
 
     const linkButton = document.getElementById("flexpa-link-btn");
     if (!linkButton) {
-        console.error("Could not find the Flexpa Link button")
+        console.error("Could not find the Flexpa Link button");
         return;
     }
     linkButton.addEventListener("click", () => {

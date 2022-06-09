@@ -6,7 +6,7 @@ function displayCoverage(resource: Coverage | undefined) {
         <div>
         Error: Undefined Resource
         <div/>
-        `
+        `;
     }
     return /* html */ `
     <div>
@@ -22,7 +22,7 @@ function displayCoverage(resource: Coverage | undefined) {
         ${resource.status}
         Payor
         ${resource.payor?.[0].display ?? ""}
-    </div>`
+    </div>`;
 
 }
 export default displayCoverage;

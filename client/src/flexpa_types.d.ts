@@ -6,7 +6,7 @@ export interface LinkExchangeResponse {
 
 export interface FlexpaConfig {
     publishableKey: string;
-    onSuccess: (publicToken: string) => {};
+    onSuccess: (publicToken: string) => Promise | unknown;
 }
 
 

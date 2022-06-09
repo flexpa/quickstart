@@ -11,6 +11,6 @@ function displayFlexpaLinkButton() {
             Link your health plan
         </div>
     </div>
-    `)
+    `);
 }
-export default displayFlexpaLinkButton; 
+export default displayFlexpaLinkButton;

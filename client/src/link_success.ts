@@ -21,7 +21,7 @@ function displaySuccessMessage(app: LinkExchangeResponse) {
                     <div class='code'>${app?.accessToken}</div>
                 </div>
             </div>
-        `
+        `;
 }
 
 export default displaySuccessMessage;

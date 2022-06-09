@@ -1,0 +1,8 @@
+# don't lint node_modules
+node_modules
+
+# don't lint tests
+__tests__
+
+# don't lint compiled code
+dist
