@@ -1,7 +1,6 @@
 import { Coverage } from 'fhir/r4';
 
 function displayCoverage(resource: Coverage | undefined) {
-    console.log("resoirce", resource)
     if (!resource) {
         return /* html */ `
         <div>

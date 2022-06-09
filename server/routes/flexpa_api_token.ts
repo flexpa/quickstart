@@ -18,7 +18,7 @@ interface FlexpaAccessTokenBody {
  */
 router.post("/flexpa-access-token", async (req: Request, res: Response) => {
     const { publicToken } = req.body as FlexpaAccessTokenBody;
-    console.log("received")
+
     if (!publicToken) {
         return res.status(400).send('Invalid Flexpa public token');
     }
@@ -40,13 +40,11 @@ router.post("/flexpa-access-token", async (req: Request, res: Response) => {
             }),
         });
         const { access_token: accessToken, patient_id: patientId, expires_in: expiresIn } = await resp.json() as LinkExchangeResponse;
-        console.log("response", accessToken, patientId, expiresIn)
 
         res.send({ accessToken, patientId, expiresIn });
     }
     catch (err) {
-        console.log("err", err)
-        return;
+        return res.status(500).send(`Error exchanging token: ${err}`);
     }
 
 });
