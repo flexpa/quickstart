@@ -22,7 +22,7 @@ nvm use
 
 npm install
 
-npm build
+npm run build
 
 npm run dev
 ```

@@ -18,7 +18,7 @@ To run the development client, start in the quickstart directory then run these 
 ```bash
 cd client
 
-nvm use
+nvm use # Note - nvm is not supported on Windows. Instead, ensure you have the correct version of node installed (see .nvmrc).
 
 npm install
 

@@ -50,9 +50,11 @@ nvm use
 
 npm install
 
-npm build
+npm run build
 
 npm run dev
 ```
+
+**Note:** `nvm` is not supported on Windows. If you are using Windows, ensure you have the correct version of Node installed. See `.nvmrc` for the recommended version.
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
