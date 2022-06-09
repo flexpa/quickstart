@@ -9,7 +9,8 @@ const app = express();
     Without CORS handling, the browser will not allow the frontend to make requests to the backend.
     Use the `cors()` to inject `Access-Control-Allow-Origin: *` header to preflight requests.
     In a production environment it's important to handle this more intelligently (see https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
-    app.use(cors()); */
+*/
+app.use(cors());
 
 // pre-parse the JSON body when appropriate
 app.use(bodyParser.json());
