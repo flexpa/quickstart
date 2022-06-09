@@ -9,8 +9,11 @@
 # debug
 npm-debug.log*
 
+# env files
+.env
+
 # local env files
-.env*
+.env*.local
 
 # typescript
 *.tsbuildinfo
