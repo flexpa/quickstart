@@ -1,6 +1,6 @@
 ## Prerequisites
 
-You must have valid public and secret keys for Flexpa API. Contact us [here](https://automatemedical.typeform.com/to/mtwkkY2r?typeform-source=quickstart) to obtain them.
+You must have valid publishable and secret keys for Flexpa API. Contact us [here](https://automatemedical.typeform.com/to/mtwkkY2r?typeform-source=quickstart) to obtain them.
 Once you have the API keys, you're ready to go!
 
 Node must be installed on your machine.

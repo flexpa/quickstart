@@ -23,8 +23,8 @@ cd quickstart
 
 ## Update environment variables
 
-You'll need to add your Flexpa public and secret keys to a `.env` file in the client and server directories.
-Rename the files `.env.template` to `.env` in both directories and update the values to your public and secret keys.
+You'll need to add your Flexpa publishable and secret keys to a `.env` file in the client and server directories.
+Rename the files `.env.template` to `.env` in both directories and update the values to your publishable and secret keys.
 During development, you will likely want to use the test mode keys rather than the production ones.
 
 ## Run the Project
