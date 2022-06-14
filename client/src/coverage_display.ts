@@ -1,14 +1,14 @@
 import { Coverage } from 'fhir/r4';
 
 function displayCoverage(resource: Coverage | undefined) {
-    if (!resource) {
-        return /* html */ `
+  if (!resource) {
+    return /* html */ `
         <div>
         Error: Undefined Resource
         <div/>
         `;
-    }
-    return /* html */ `
+  }
+  return /* html */ `
     <div>
         ID
         ${resource.id}

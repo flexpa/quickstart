@@ -1,5 +1,5 @@
 function displayFlexpaLinkButton() {
-    return (/* html */`
+  return (/* html */`
     <div class="link-section">
         Click the button below to link your health plan.
         <div id="flexpa-link-btn" class="launch-btn">

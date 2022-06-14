@@ -1,12 +1,12 @@
 export interface LinkExchangeResponse {
-    accessToken: string;
-    patientId: string;
-    expiresIn: number;
+  accessToken: string;
+  patientId: string;
+  expiresIn: number;
 }
 
 export interface FlexpaConfig {
-    publishableKey: string;
-    onSuccess: (publicToken: string) => Promise | unknown;
+  publishableKey: string;
+  onSuccess: (publicToken: string) => Promise | unknown;
 }
 
 
