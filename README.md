@@ -14,13 +14,6 @@ git clone https://github.com/flexpa/quickstart.git
 cd quickstart
 ```
 
-Or by using SSH:
-
-```bash
-git@github.com:flexpa/quickstart.git
-cd quickstart
-```
-
 ## Update environment variables
 
 You'll need to add your Flexpa publishable and secret keys to a `.env` file in the client and server directories.
