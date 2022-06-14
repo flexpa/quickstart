@@ -14,33 +14,40 @@ git clone https://github.com/flexpa/quickstart.git
 cd quickstart
 ```
 
-Or by using SSH:
-
-```bash
-git@github.com:flexpa/quickstart.git
-cd quickstart
-```
-
 ## Update environment variables
 
-You'll need to add your Flexpa public and secret keys to a `.env.local` file.
-Rename the file `.env.template` to `.env.local` and update the values to include your public and secret keys.
+You'll need to add your Flexpa publishable and secret keys to a `.env` file in the client and server directories.
+Rename the files `.env.template` to `.env` in both directories and update the values to your publishable and secret keys.
 During development, you will likely want to use the test mode keys rather than the production ones.
 
 ## Run the Project
 
-First, run the development server:
+First, run the development client:
 
 ```bash
+cd client
+
 nvm use
+
+npm install
 
 npm run dev
 ```
 
+Next, run the development server:
+
+```bash
+cd server
+
+nvm use
+
+npm install
+
+npm run build
+
+npm run dev
+```
+
+**Note:** `nvm` is not supported on Windows. If you are using Windows, ensure you have the correct version of Node installed. See `.nvmrc` for the recommended version.
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
