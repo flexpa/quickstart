@@ -2,7 +2,9 @@ html {
   background-color: #f9fafb;
   line-height: 1.5;
   tab-size: 4;
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+  /* font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji; */
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+
 }
 
 .launch-btn {
@@ -16,6 +18,7 @@ html {
   padding: 1.25em 0 1.25em 0;
   width: 100%;
   position: relative;
+  margin: 0.5em;
 }
 
 .section-container {
@@ -117,4 +120,30 @@ html {
 
 .section-container h1 {
   width: 100%;
+}
+
+#coverage-container {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  margin-top: 60px;
+}
+
+dl {
+  width: 700px;
+  display: grid;
+  grid-template-columns: 100px 600px;
+  grid-gap: 8px;
+  margin: auto;
+  justify-items: baseline;
+  padding: 16px;
+  border-radius: 4px;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
+  background-color: white;
+  margin-bottom: 24px;
+  text-transform: capitalize;
+}
+
+dt {
+  font-weight: 600;
 }
