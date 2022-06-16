@@ -1,7 +1,7 @@
 import { Coverage } from 'fhir/r4';
 
-function displayCoverage(resource: Coverage | undefined) {
-  if (!resource) {
+function displayCoverage(coverage: Coverage | undefined) {
+  if (!coverage) {
     return /* html */ `
         <div>
         Error: Undefined Resource
@@ -9,20 +9,22 @@ function displayCoverage(resource: Coverage | undefined) {
         `;
   }
   return /* html */ `
-    <div>
-        ID
-        ${resource.id}
-        Period Start
-        ${resource.period?.start ?? ""}
-        Period End
-        ${resource.period?.end ?? ""}
-        Type
-        ${resource.type?.text ?? ""}
-        Status
-        ${resource.status}
-        Payor
-        ${resource.payor?.[0].display ?? ""}
-    </div>`;
+  <dl>
+    <dt>Beneficiary</dt>
+    <dd>${coverage?.beneficiary?.display ?? ""}</dd>
+        <dt>ID</dt>
+        <dd>${coverage.id}</dd>
+        <dt>Period</dt>
+        <dd>${coverage.period?.start ?? ""} ${`- ${coverage.period?.end}` ?? ""}</dd>
+        <dt>Type</dt>
+        <dd>${coverage.type?.text ?? ""}</dd>
+        <dt>Relationship</dt>
+        <dd>${coverage?.relationship?.text}</dd>
+        <dt>Status</dt>
+        <dd>${coverage.status}</dd>
+        <dt>Payor</dt>
+        <dd>${coverage.payor?.[0].display ?? ""}</dd>
+  </dl>`;
 
 }
 export default displayCoverage;

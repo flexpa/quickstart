@@ -69,7 +69,7 @@ function initializePage() {
       /*  Display some information coverage information
           see https://www.hl7.org/fhir/coverage.html for available fields */
       const coverageHTMLs = fhirBody?.entry?.map((entry) => displayCoverage(entry.resource as Coverage | undefined));
-      const appDiv = document.getElementById("app");
+      const appDiv = document.getElementById("fhir-coverage-resources");
 
       if (appDiv && coverageHTMLs) {
         appDiv.innerHTML = coverageHTMLs.join("\n");
