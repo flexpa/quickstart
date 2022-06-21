@@ -2,9 +2,7 @@ html {
   background-color: #f9fafb;
   line-height: 1.5;
   tab-size: 4;
-  /* font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji; */
   font-family: Avenir, Helvetica, Arial, sans-serif;
-
 }
 
 .launch-btn {
@@ -63,7 +61,6 @@ html {
   font-size: 1em;
   color: rgb(75 85 99)
 }
-
 
 .table-heading {
   font-weight: 600;
