@@ -2,7 +2,7 @@ import './style.css';
 import { FlexpaConfig, LinkExchangeResponse } from './flexpa_types';
 import displaySuccessMessage from './link_success';
 import displayCoverage from './coverage_display';
-import { Bundle, Coverage } from 'fhir/r4';
+import { Bundle, Coverage, Patient } from 'fhir/r4';
 import displayFlexpaLinkButton from './flexpa_link_button';
 import displayLoading from './loading';
 
@@ -57,6 +57,7 @@ function initializePage() {
       if (!appDiv) {
         return;
       }
+
       // Display loading message for coverage cards
       appDiv.innerHTML = /* html */ `
       <h2>Patient Coverage</h2>      
@@ -67,23 +68,41 @@ function initializePage() {
         ${displayLoading()}
       </div>
       `;
-      /*  Using the accessToken and patientId returned from `POST /flexpa-access-token` make a request
+
+      /*  Using the accessToken and patientId returned from `POST /flexpa-access-token` make a search request
           to the patient's payer FHIR server through `https://api.flexpa.com/fhir`.
-          include the `patientId` in the query parameter and the `accessToken` within the `authorization`
+          Include the `patientId` in the query parameter and the `accessToken` within the `authorization`
           HTTP header. */
-      const fhirResp = await fetch(`${import.meta.env.VITE_FLEXPA_PUBLIC_FHIR_BASE_URL}/Coverage?patient=Patient/${patientId}`, {
+      const fhirCoverageResp = await fetch(`${import.meta.env.VITE_FLEXPA_PUBLIC_FHIR_BASE_URL}/Coverage?patient=${patientId}`, {
         method: "GET",
         headers: {
           authorization: `Bearer ${accessToken}`,
         },
       });
 
-      // parse the response body
-      const fhirBody: Bundle = await fhirResp.json();
+      // Parse the Coverage response body
+      const fhirCoverageBody: Bundle = await fhirCoverageResp.json();
+      if (!fhirCoverageBody?.entry) {
+        return;
+      }
+
+      /*  Load the current Patient using a FHIR read request
+          see https://www.hl7.org/fhir/patient.html for available fields */
+      const fhirPatientResp = await fetch(`${import.meta.env.VITE_FLEXPA_PUBLIC_FHIR_BASE_URL}/Patient/${patientId}`, {
+        method: "GET",
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      // Parse the Patient response body
+      const patient: Patient = await fhirPatientResp.json();
 
       /*  Display some information coverage information
           see https://www.hl7.org/fhir/coverage.html for available fields */
-      const coverageHTMLs = fhirBody?.entry?.map((entry) => displayCoverage(entry.resource as Coverage | undefined));
+      const coverageHTMLs = fhirCoverageBody?.entry?.map((entry) =>
+        displayCoverage(entry.resource as Coverage | undefined, patient)
+      );
       const coverageListDiv = document.getElementById('coverage-list');
 
       if (coverageListDiv && coverageHTMLs) {
