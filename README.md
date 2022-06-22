@@ -21,6 +21,24 @@ cd quickstart
 
 You'll need to add your Flexpa publishable and secret keys to a `.env` file in the client and server directories.
 Rename the files `.env.template` to `.env` in both directories and update the values to your publishable and secret keys.
+
+```bash
+cp client/.env.template client/.env
+cp server/.env.template server/.env
+```
+
+Open both `client/.env` and `server/.env` in a text editor and replace the values with your Test Mode API keys. Remember to save!
+
+```bash
+# client/.env
+VITE_FLEXPA_PUBLISHABLE_KEY=
+```
+
+```bash
+# server/.env
+FLEXPA_API_SECRET_KEY=
+```
+
 During development, you will need to use the test mode API keys rather than the production ones.
 
 ## Run the Project
