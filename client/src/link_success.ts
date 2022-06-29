@@ -7,7 +7,7 @@ function displaySuccessMessage(app: LinkExchangeResponse) {
             Success, your health plan has been linked!
         </h1>
         <div>
-            The access token and patient ID are now stored in the AppContext.
+            The access token is now stored in the AppContext.
             The application is ready to start making FHIR resource requests.
         </div>
     </div>
