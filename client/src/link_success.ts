@@ -13,10 +13,6 @@ function displaySuccessMessage(app: LinkExchangeResponse) {
     </div>
     <div>
         <div class='app-context'>
-            <div class='table-heading'>Patient ID</div>
-            <div class='code'>${app?.patientId}</div>
-        </div>
-        <div class='app-context'>
             <div class='table-heading'>Access Token</div>
             <div class='code'>${app?.accessToken}</div>
         </div>
