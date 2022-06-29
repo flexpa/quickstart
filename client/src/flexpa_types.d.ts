@@ -1,6 +1,5 @@
 export interface LinkExchangeResponse {
   accessToken: string;
-  patientId: string;
   expiresIn: number;
 }
 

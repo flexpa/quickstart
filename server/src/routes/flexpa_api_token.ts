@@ -5,7 +5,6 @@ const router: Router = express.Router();
 
 interface LinkExchangeResponse {
   access_token: string;
-  patient_id: string;
   expires_in: number;
 }
 
@@ -14,7 +13,7 @@ interface FlexpaAccessTokenBody {
 }
 /**
  * POST /flexpa-access-token
- * Exchanges your `publicToken` for an `access_token` and `patient_id`
+ * Exchanges your `publicToken` for an `access_token`
  */
 router.post("/flexpa-access-token", async (req: Request, res: Response) => {
   const { publicToken } = req.body as FlexpaAccessTokenBody;
@@ -27,7 +26,7 @@ router.post("/flexpa-access-token", async (req: Request, res: Response) => {
     return res.status(500).send('Invalid public API base URL');
   }
 
-  // Call Flexpa API's exchange endpoint to exchange your `publicToken` for an `access_token` and a `patient_id`
+  // Call Flexpa API's exchange endpoint to exchange your `publicToken` for an `access_token`
   try {
     const resp = await fetch(`${process.env.FLEXPA_PUBLIC_API_BASE_URL}/link/exchange`, {
       method: "POST",
@@ -39,9 +38,9 @@ router.post("/flexpa-access-token", async (req: Request, res: Response) => {
         secret_key: process.env.FLEXPA_API_SECRET_KEY,
       }),
     });
-    const { access_token: accessToken, patient_id: patientId, expires_in: expiresIn } = await resp.json() as LinkExchangeResponse;
+    const { access_token: accessToken, expires_in: expiresIn } = await resp.json() as LinkExchangeResponse;
 
-    res.send({ accessToken, patientId, expiresIn });
+    res.send({ accessToken, expiresIn });
   }
   catch (err) {
     return res.status(500).send(`Error exchanging token: ${err}`);

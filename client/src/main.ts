@@ -44,14 +44,14 @@ function initializePage() {
       }
 
       // Parse the response body
-      const { accessToken, patientId, expiresIn } = await resp.json() as LinkExchangeResponse;
+      const { accessToken, expiresIn } = await resp.json() as LinkExchangeResponse;
       const flexpaLinkDiv = document.getElementById("flexpa-link");
       if (!flexpaLinkDiv) {
         console.error("Could not find the Flexpa Link div");
         return;
       }
 
-      flexpaLinkDiv.innerHTML = displaySuccessMessage({ accessToken, patientId, expiresIn });
+      flexpaLinkDiv.innerHTML = displaySuccessMessage({ accessToken, expiresIn });
 
       const appDiv = document.getElementById("coverage-container");
       if (!appDiv) {
@@ -70,11 +70,11 @@ function initializePage() {
       </div>
       `;
 
-      /*  Using the accessToken and patientId returned from `POST /flexpa-access-token` make a search request
+      /*  Using the accessToken returned from `POST /flexpa-access-token` make a search request
           to the patient's payer FHIR server through `https://api.flexpa.com/fhir`.
-          Include the `patientId` in the query parameter and the `accessToken` within the `authorization`
+          Include the `$PATIENT_ID` wildcard in the query parameter and the `accessToken` within the `authorization`
           HTTP header. */
-      const fhirCoverageResp = await fetch(`${import.meta.env.VITE_FLEXPA_PUBLIC_FHIR_BASE_URL}/Coverage?patient=${patientId}`, {
+      const fhirCoverageResp = await fetch(`${import.meta.env.VITE_FLEXPA_PUBLIC_FHIR_BASE_URL}/Coverage?patient=$PATIENT_ID`, {
         method: "GET",
         headers: {
           authorization: `Bearer ${accessToken}`,
@@ -89,7 +89,7 @@ function initializePage() {
 
       /*  Load the current Patient using a FHIR read request
           see https://www.hl7.org/fhir/patient.html for available fields */
-      const fhirPatientResp = await fetch(`${import.meta.env.VITE_FLEXPA_PUBLIC_FHIR_BASE_URL}/Patient/${patientId}`, {
+      const fhirPatientResp = await fetch(`${import.meta.env.VITE_FLEXPA_PUBLIC_FHIR_BASE_URL}/Patient/$PATIENT_ID`, {
         method: "GET",
         headers: {
           authorization: `Bearer ${accessToken}`,
