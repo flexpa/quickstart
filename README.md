@@ -1,6 +1,6 @@
 # <img src="./flexpa_logo.png" height="60px" align="center" alt="Flexpa logo"> Flexpa Quickstart
 
-This repository is a companion to Flexpa's [quickstart guide](https://www.flexpa.com/docs/guides/quickstart).
+This repository is a companion to Flexpa's [quickstart guide](https://www.flexpa.com/docs/guides/quickstart) which provides a detailed explanation of how this code example works.
 
 ## Prerequisites
 
@@ -27,7 +27,7 @@ cp client/.env.template client/.env
 cp server/.env.template server/.env
 ```
 
-Open both `client/.env` and `server/.env` in a text editor and replace the values with your Test Mode API keys. Remember to save!
+Open both `client/.env` and `server/.env` in a text editor and replace the values with your Test Mode API keys.
 
 ```bash
 # client/.env
@@ -55,6 +55,8 @@ npm install
 npm run dev
 ```
 
+**Note:** `nvm` is not supported on Windows. If you are using Windows, ensure you have the correct version of Node installed. See `.nvmrc` for the recommended version.
+
 Next, run the development server:
 
 ```bash
@@ -68,8 +70,6 @@ npm run build
 
 npm run dev
 ```
-
-**Note:** `nvm` is not supported on Windows. If you are using Windows, ensure you have the correct version of Node installed. See `.nvmrc` for the recommended version.
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
