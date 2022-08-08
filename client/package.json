@@ -11,13 +11,13 @@
   },
   "devDependencies": {
     "@types/fhir": "^0.0.35",
-    "@typescript-eslint/eslint-plugin": "^5.31.0",
-    "@typescript-eslint/parser": "^5.31.0",
+    "@typescript-eslint/eslint-plugin": "^5.32.0",
+    "@typescript-eslint/parser": "^5.32.0",
     "typescript": "^4.7.4",
     "vite": "^2.9.14"
   },
   "dependencies": {
-    "eslint": "^8.20.0",
+    "eslint": "^8.21.0",
     "fhir": "^4.11.1"
   }
 }
