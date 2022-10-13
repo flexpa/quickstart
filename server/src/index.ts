@@ -1,6 +1,6 @@
 import express from 'express';
-import bodyParser from "body-parser";
-import cors from "cors";
+import bodyParser from 'body-parser';
+import cors from 'cors';
 import routes from './routes/flexpa_api_token.js';
 import 'dotenv/config';
 const app = express();
@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 app.use("", routes);
 
 
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT, 'localhost', () => {
   console.log(`Server listening on port ${process.env.PORT}`);
 });
 

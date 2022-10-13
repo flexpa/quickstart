@@ -78,3 +78,20 @@ You can use the following test patient login with Humana:
 - **Username:** HUser00007
 
 - **Password:** PW00007!
+
+## Use Docker
+
+Use Docker Compose with this project by, first, editing `compose.yaml` to add your Flexpa publishable and secret keys adding them to:
+
+```bash
+VITE_FLEXPA_PUBLISHABLE_KEY=
+FLEXPA_API_SECRET_KEY=
+```
+
+Then, run the project with:
+
+```bash
+docker-compose up
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
