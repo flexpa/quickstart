@@ -9,7 +9,6 @@ services:
       - VITE_FLEXPA_PUBLIC_FHIR_BASE_URL=https://api.flexpa.com/fhir
       - VITE_SERVER_URL=http://localhost:9000
       - VITE_FLEXPA_PUBLISHABLE_KEY=
-    command: npm run dev -- --host
   server:
     ports:
       - '9000:9000'
@@ -17,6 +16,5 @@ services:
       context: ./
       target: server
     environment:
-      - PORT=9000
       - FLEXPA_PUBLIC_API_BASE_URL=https://api.flexpa.com
       - FLEXPA_API_SECRET_KEY=
