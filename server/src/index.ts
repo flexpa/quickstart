@@ -16,8 +16,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use("", routes);
 
-
-app.listen(process.env.PORT, 'localhost', () => {
-  console.log(`Server listening on port ${process.env.PORT}`);
+app.listen(9000, '0.0.0.0', () => {
+  console.log('Server listening on http://localhost:9000');
 });
 

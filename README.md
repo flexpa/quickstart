@@ -91,7 +91,7 @@ FLEXPA_API_SECRET_KEY=
 Then, run the project with:
 
 ```bash
-docker-compose up
+docker-compose up --build
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
