@@ -7,7 +7,7 @@ Use Link to help your users connect health plan data to your app
 Adding Flexpa Link to your app lets your users authorize access to their health plan data. Your app can then use the Flexpa API to retrieve patient health plan and clinical data.
 
 Flexpa Link will handle the SMART on FHIR authentication flow and error handling for each health data source that we support. Flexpa Link works across all modern browsers.
-
+ 
 
 
 You must have valid publishable and secret keys for Flexpa API. [Generate](https://www.flexpa.com/docs/sdk/api#keys) test mode API keys or [contact us](https://automatemedical.typeform.com/to/mtwkkY2r?typeform-source=quickstart) to obtain production API keys. Once you have the API keys, you're ready to go!
