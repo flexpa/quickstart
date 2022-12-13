@@ -1,33 +1,34 @@
 # <img src="./flexpa_logo.png" height="60px" align="center" alt="Flexpa logo"> Flexpa Quickstart
 
-This repository is a companion to Flexpa's [quickstart guide](https://www.flexpa.com/docs/guides/quickstart) which provides a detailed explanation of how this code example works.
+This repository is a companion to Flexpa's [quickstart guide](https://www.flexpa.com/docs/guides/quickstart) which also provides a detailed explanation of how this code example works.
 
 ## Prerequisites
 
-You must have valid publishable and secret keys for Flexpa API. [Generate](https://www.flexpa.com/docs/sdk/api#keys) test mode API keys or [contact us](https://automatemedical.typeform.com/to/mtwkkY2r?typeform-source=quickstart) to obtain production API keys. Once you have the API keys, you're ready to go!
+The quickstart assumes you have [NodeJS (v16.14.2+) and npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) already installed.
 
-Node must be installed on your machine.
+## Clone repo
 
-## Clone the Repository
-
-First you must clone the quickstart repository. You can do this using HTTPS:
+First, clone the quickstart repository:
 
 ```bash
 git clone https://github.com/flexpa/quickstart.git
+```
+
+## Set API keys
+
+Second, create an account in our [developer portal](https://portal.flexpa.com/) to get your test mode keys. You can [contact us](https://flexpa.typeform.com/intake) later for live mode access.
+
+You'll need to add your publishable and secret API keys to the `.env` files in the client and server directories.
+
+Rename the `.env.template` file as `.env` in both directories.
+
+```bash 
 cd quickstart
+cp client/.env.template client/.env 
+cp server/.env.template server/.env 
 ```
 
-## Update environment variables
-
-You'll need to add your Flexpa publishable and secret keys to a `.env` file in the client and server directories.
-Rename the files `.env.template` to `.env` in both directories and update the values to your publishable and secret keys.
-
-```bash
-cp client/.env.template client/.env
-cp server/.env.template server/.env
-```
-
-Open both `client/.env` and `server/.env` in a text editor and replace the values with your Test Mode API keys.
+Open both `client/.env` and `server/.env` and add your test mode API keys.
 
 ```bash
 # client/.env
@@ -39,49 +40,64 @@ VITE_FLEXPA_PUBLISHABLE_KEY=
 FLEXPA_API_SECRET_KEY=
 ```
 
-During development, you will need to use the test mode API keys rather than the production ones.
+## Run project
 
-## Run the Project
+The quickstart code includes two components:
+* Frontend client for creating the Flexpa Link connection to a health plan
+* Backend server that swaps a public token for an access token 
 
-First, run the development client:
+Run both components simultaneously to test the application. From the root of the project, run the frontend client:
 
 ```bash
+# Navigate into the client directory
 cd client
 
+# Set the correct node version
 nvm use
 
+# Install the dependencies
 npm install
 
+# Run the frontend server
 npm run dev
 ```
 
 **Note:** `nvm` is not supported on Windows. If you are using Windows, ensure you have the correct version of Node installed. See `.nvmrc` for the recommended version.
 
-Next, run the development server:
+Next, from the root of the project in a new terminal, run the backend server:
 
 ```bash
+# Navigate into the server directory
 cd server
 
+# Set the correct node version
 nvm use
 
+# Install the dependencies
 npm install
 
+# Compile the TypeScript to JavaScript code
 npm run build
 
+# Run the backend server
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Test application
 
-You can use the following test patient login with Humana:
+To test the quickstart app: 
 
-- **Username:** HUser00007
+1. Open <a href="http://localhost:3000" target="_blank">http://localhost:3000 </a> in your browser.
+1. Click the "Connect your health plan with Flexpa Link" to open the Flexpa Link modal.
+1. Select any health plan payer from the list.
+1. When directed to the provider's site, authenticate using a <a href="https://www.flexpa.com/docs/getting-started/test-mode#test-mode-logins" target="_blank">test mode login</a>.
+1. When Flexpa Link indicates success, click "Continue".
 
-- **Password:** PW00007!
+Upon successful authentication, you'll be redirected back to localhost. The server script automatically exchanges the public token for an access token, and then the client app performs a FHIR request and reports upon the result. (This may take a moment to complete.)
 
 ## Use Docker
 
-Use Docker Compose with this project by, first, editing `compose.yaml` to add your Flexpa publishable and secret keys adding them to:
+To use Docker Compose with this project, add your Flexpa publishable and secret keys to `compose.yaml`:
 
 ```bash
 VITE_FLEXPA_PUBLISHABLE_KEY=
@@ -93,5 +109,3 @@ Then, run the project with:
 ```bash
 docker-compose up --build
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
