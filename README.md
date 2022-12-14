@@ -16,7 +16,7 @@ git clone https://github.com/flexpa/quickstart.git
 
 ## Set API keys
 
-Second, create an account in our [developer portal](https://portal.flexpa.com/) to get your test mode keys. You can [contact us](https://flexpa.typeform.com/intake) later for live mode access.
+Second, create an account in our [developer portal](https://portal.flexpa.com/) to get your test mode keys. (When you're ready, you can request live mode access within the developer portal.)
 
 You'll need to add your publishable and secret API keys to the `.env` files in the client and server directories.
 
