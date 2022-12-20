@@ -62,8 +62,8 @@ function initializePage() {
       appDiv.innerHTML = /* html */ `
       <h2>Patient Coverage</h2>      
       <div>
-        <p><a href="https://www.flexpa.com/docs/guides/coverage">Coverage</a> is a FHIR Resource that describes the financial terms of a specific health insurance plan for a specific person.</p>
-        <p>View more information on FHIR resource requests in the <a href="https://www.flexpa.com/docs">Flexpa Docs</a></p>
+        <p><a href="https://www.flexpa.com/docs/guides/coverage">Coverage</a> is a FHIR resource that describes the financial terms of a specific health insurance plan for a specific person.</p>
+        <p>View more information on FHIR resource requests in the <a href="https://www.flexpa.com/docs">Flexpa docs</a>.</p>
       </div>
       <div id="coverage-list">
         ${displayLoading()}

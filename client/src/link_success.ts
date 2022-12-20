@@ -3,12 +3,12 @@ import { LinkExchangeResponse } from "./flexpa_types";
 function displaySuccessMessage(app: LinkExchangeResponse) {
   return /* html */ `
     <div class='section-container'>
-        <h1>
+        <h2>
             Success, your health plan has been linked!
-        </h1>
+        </h2>
         <div>
             The access token is now stored in the AppContext.
-            The application is ready to start making FHIR resource requests.
+            The application is ready to make FHIR resource requests.
         </div>
     </div>
     <div>
