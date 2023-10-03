@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import routes from './routes/flexpa_api_token.js';
+import fhirRouter from './routes/fhir.js';
 import 'dotenv/config';
 const app = express();
 
@@ -15,6 +16,8 @@ app.use(cors());
 // pre-parse the JSON body when appropriate
 app.use(bodyParser.json());
 app.use("", routes);
+app.use('/fhir', fhirRouter);
+
 
 app.listen(9000, '0.0.0.0', () => {
   console.log('Server listening on http://localhost:9000');

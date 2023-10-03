@@ -1,20 +1,22 @@
-import './style.css';
-import { FlexpaConfig, LinkExchangeResponse } from './flexpa_types';
-import displaySuccessMessage from './link_success';
-import displayCoverage from './coverage_display';
-import { Bundle, Coverage, Patient } from 'fhir/r4';
-import displayFlexpaLinkButton from './flexpa_link_button';
-import displayLoading from './loading';
+import "./style.css";
+import { FlexpaConfig, LinkExchangeResponse } from "./flexpa_types";
+import displaySuccessMessage from "./link_success";
+import displayCoverage from "./coverage_display";
+import { Bundle, Coverage, Patient } from "fhir/r4";
+import displayFlexpaLinkButton from "./flexpa_link_button";
+import displayLoading from "./loading";
 
 // Let Typescript know about the FlexpaLink object from the link script
 declare const FlexpaLink: {
-  create: (config: FlexpaConfig) => Record<string, unknown>,
-  open: () => Record<string, unknown>
+  create: (config: FlexpaConfig) => Record<string, unknown>;
+  open: () => Record<string, unknown>;
 };
 
 function initializePage() {
   if (!import.meta.env.VITE_FLEXPA_PUBLISHABLE_KEY) {
-    console.error("No publishable key found. Set VITE_FLEXPA_PUBLISHABLE_KEY in .env");
+    console.error(
+      "No publishable key found. Set VITE_FLEXPA_PUBLISHABLE_KEY in .env"
+    );
   }
   /**
    * Initialize the FlexpaLink object
@@ -27,15 +29,17 @@ function initializePage() {
           include the `publicToken` in the body. */
       let resp;
       try {
-        resp = await fetch(`${import.meta.env.VITE_SERVER_URL}/flexpa-access-token`, {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-          },
-          body: JSON.stringify({ publicToken }),
-        });
-      }
-      catch (err) {
+        resp = await fetch(
+          `${import.meta.env.VITE_SERVER_URL}/flexpa-access-token`,
+          {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+            },
+            body: JSON.stringify({ publicToken }),
+          }
+        );
+      } catch (err) {
         console.log("err", err);
       }
 
@@ -44,14 +48,18 @@ function initializePage() {
       }
 
       // Parse the response body
-      const { accessToken, expiresIn } = await resp.json() as LinkExchangeResponse;
+      const { accessToken, expiresIn } =
+        (await resp.json()) as LinkExchangeResponse;
       const flexpaLinkDiv = document.getElementById("flexpa-link");
       if (!flexpaLinkDiv) {
         console.error("Could not find the Flexpa Link div");
         return;
       }
 
-      flexpaLinkDiv.innerHTML = displaySuccessMessage({ accessToken, expiresIn });
+      flexpaLinkDiv.innerHTML = displaySuccessMessage({
+        accessToken,
+        expiresIn,
+      });
 
       const appDiv = document.getElementById("coverage-container");
       if (!appDiv) {
@@ -71,40 +79,67 @@ function initializePage() {
       `;
 
       /*  Using the accessToken returned from `POST /flexpa-access-token` make a search request
-          to the patient's payer FHIR server through `https://api.flexpa.com/fhir`.
+          to the patient's payer FHIR server via your backend server.
           Include the `$PATIENT_ID` wildcard in the query parameter and the `accessToken` within the `authorization`
           HTTP header. */
-      const fhirCoverageResp = await fetch(`${import.meta.env.VITE_FLEXPA_PUBLIC_FHIR_BASE_URL}/Coverage?patient=$PATIENT_ID`, {
-        method: "GET",
-        headers: {
-          authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      // Parse the Coverage response body
-      const fhirCoverageBody: Bundle = await fhirCoverageResp.json();
-      if (!fhirCoverageBody?.entry) {
+      let fhirCoverageResp;
+      let fhirCoverageBody: Bundle;
+      try {
+        fhirCoverageResp = await fetch(
+          `${
+            import.meta.env.VITE_SERVER_URL
+          }/fhir/Coverage?patient=$PATIENT_ID`,
+          {
+            method: "GET",
+            headers: {
+              authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        // Parse the Coverage response body
+        fhirCoverageBody = await fhirCoverageResp.json();
+      } catch (err) {
+        console.log("Coverage error: ", err);
+        return;
+      }
+      if (!fhirCoverageResp.ok) {
+        console.error(`Fetch failed with status: ${fhirCoverageResp.status}`);
         return;
       }
 
       /*  Load the current Patient using a FHIR read request
           see https://www.hl7.org/fhir/patient.html for available fields */
-      const fhirPatientResp = await fetch(`${import.meta.env.VITE_FLEXPA_PUBLIC_FHIR_BASE_URL}/Patient/$PATIENT_ID`, {
-        method: "GET",
-        headers: {
-          authorization: `Bearer ${accessToken}`,
-        },
-      });
 
-      // Parse the Patient response body
-      const patient: Patient = await fhirPatientResp.json();
+      let fhirPatientResp;
+      let fhirPatientBody: Patient;
+      try {
+         fhirPatientResp = await fetch(
+          `${import.meta.env.VITE_SERVER_URL}/fhir/Patient/$PATIENT_ID`,
+          {
+            method: "GET",
+            headers: {
+              authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        // Parse the Coverage response body
+        fhirPatientBody = await fhirPatientResp.json();
+      } catch (err) {
+        console.log("Patient error: ", err);
+        return;
+      }
+      if (!fhirPatientResp.ok) {
+        console.error(`Fetch failed with status: ${fhirPatientResp.status}`);
+        return;
+      }
+
 
       /*  Display some information coverage information
           see https://www.hl7.org/fhir/coverage.html for available fields */
       const coverageHTMLs = fhirCoverageBody?.entry?.map((entry) =>
-        displayCoverage(entry.resource as Coverage | undefined, patient)
+        displayCoverage(entry.resource as Coverage | undefined, fhirPatientBody)
       );
-      const coverageListDiv = document.getElementById('coverage-list');
+      const coverageListDiv = document.getElementById("coverage-list");
 
       if (coverageListDiv && coverageHTMLs) {
         coverageListDiv.innerHTML = coverageHTMLs.join("\n");
@@ -130,4 +165,3 @@ function initializePage() {
 }
 
 initializePage();
-
