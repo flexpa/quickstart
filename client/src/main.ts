@@ -12,6 +12,28 @@ declare const FlexpaLink: {
   open: () => Record<string, unknown>;
 };
 
+async function fetchWithRetry(url: string, options: RequestInit, maxRetries = 3) {
+  let retries = 0;
+  let delay = 1000;  // Initial delay is 1 second
+
+  while (retries < maxRetries) {
+    const response = await fetch(url, options);
+
+    if (response.status !== 429) {
+      return response;
+    }
+
+    const retryAfter = response.headers.get("Retry-After") || delay;
+    await new Promise(resolve => setTimeout(resolve, Number(retryAfter) * 1000));
+
+    retries++;
+    delay *= 2;  // Double the delay for exponential backoff
+  }
+
+  throw new Error("Max retries reached.");
+}
+
+
 function initializePage() {
   if (!import.meta.env.VITE_FLEXPA_PUBLISHABLE_KEY) {
     console.error(
@@ -79,16 +101,14 @@ function initializePage() {
       `;
 
       /*  Using the accessToken returned from `POST /flexpa-access-token` make a search request
-          to the patient's payer FHIR server via your backend server.
+          to the patient's payer FHIR server through `https://api.flexpa.com/fhir`.
           Include the `$PATIENT_ID` wildcard in the query parameter and the `accessToken` within the `authorization`
           HTTP header. */
       let fhirCoverageResp;
       let fhirCoverageBody: Bundle;
       try {
-        fhirCoverageResp = await fetch(
-          `${
-            import.meta.env.VITE_SERVER_URL
-          }/fhir/Coverage?patient=$PATIENT_ID`,
+         fhirCoverageResp = await fetchWithRetry(
+          `${import.meta.env.VITE_SERVER_URL}/fhir/Coverage?patient=$PATIENT_ID`,
           {
             method: "GET",
             headers: {
@@ -113,7 +133,7 @@ function initializePage() {
       let fhirPatientResp;
       let fhirPatientBody: Patient;
       try {
-         fhirPatientResp = await fetch(
+         fhirPatientResp = await fetchWithRetry(
           `${import.meta.env.VITE_SERVER_URL}/fhir/Patient/$PATIENT_ID`,
           {
             method: "GET",
