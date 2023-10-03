@@ -20,13 +20,8 @@ async function fetchWithRetry(url: string, options: RequestInit, maxRetries = 10
   let retries = 0;
   let delay = 1000;  // Initial delay is 1 second
 
-  const augmentedHeaders = {
-    ...options.headers,
-    "x-flexpa-raw": "0"
-  };
-
   while (retries < maxRetries) {
-    const response = await fetch(url, {...options, headers: augmentedHeaders});
+    const response = await fetch(url, options);
 
     if (response.status !== 429) {
       return response;

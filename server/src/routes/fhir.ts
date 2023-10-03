@@ -20,6 +20,7 @@ router.use("/", async (req: Request, res: Response) => {
       headers: {
         "content-type": "application/json",
         "Authorization": authorization,
+        "x-flexpa-raw": "0"
       }
     });
     const fhirBody: Bundle = await fhirResp.json();
