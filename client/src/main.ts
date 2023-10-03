@@ -12,12 +12,21 @@ declare const FlexpaLink: {
   open: () => Record<string, unknown>;
 };
 
-async function fetchWithRetry(url: string, options: RequestInit, maxRetries = 3) {
+  /**
+   *  This function retries a fetch request if the response is a 429 Too Many Requests.
+   *  This is necessary because the Flexpa API may return a 429 if the data has not yet been loaded into the cache.
+   */
+async function fetchWithRetry(url: string, options: RequestInit, maxRetries = 10) {
   let retries = 0;
   let delay = 1000;  // Initial delay is 1 second
 
+  const augmentedHeaders = {
+    ...options.headers,
+    "x-flexpa-raw": "0"
+  };
+
   while (retries < maxRetries) {
-    const response = await fetch(url, options);
+    const response = await fetch(url, {...options, headers: augmentedHeaders});
 
     if (response.status !== 429) {
       return response;
