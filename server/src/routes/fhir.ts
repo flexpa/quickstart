@@ -8,15 +8,14 @@ const router: Router = express.Router();
 /**
  * Handles FHIR requests
  */
-router.use("/fhir", async (req: Request, res: Response) => {
+router.use("/", async (req: Request, res: Response) => {
     const { authorization } = req.headers;
     const { path } = req;
     if (!authorization) return res.status(401).send('All requests must be authenticated.');
-console.log(req.url);
 
   // Call Flexpa FHIR API
   try {
-    const fhirResp = await fetch(`${process.env.FLEXPA_PUBLIC_API_BASE_URL}${path}`, {
+    const fhirResp = await fetch(`${process.env.FLEXPA_PUBLIC_API_BASE_URL}/fhir${path}`, {
       method: "GET",
       headers: {
         "content-type": "application/json",

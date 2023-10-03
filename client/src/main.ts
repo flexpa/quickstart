@@ -96,39 +96,48 @@ function initializePage() {
             },
           }
         );
-        console.log("fhirCoverageResp", fhirCoverageResp);
         // Parse the Coverage response body
         fhirCoverageBody = await fhirCoverageResp.json();
       } catch (err) {
-        console.log("Coverage error", err);
+        console.log("Coverage error: ", err);
         return;
       }
-
-      if (!fhirCoverageResp) {
-        console.log("Returning");
+      if (!fhirCoverageResp.ok) {
+        console.error(`Fetch failed with status: ${fhirCoverageResp.status}`);
         return;
       }
 
       /*  Load the current Patient using a FHIR read request
           see https://www.hl7.org/fhir/patient.html for available fields */
-      const fhirPatientResp = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}}/fhir/Patient/$PATIENT_ID`,
-        {
-          method: "GET",
-          headers: {
-            authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      console.log("fhirPatientResp", fhirPatientResp);
 
-      // Parse the Patient response body
-      const patient: Patient = await fhirPatientResp.json();
+      let fhirPatientResp;
+      let fhirPatientBody: Patient;
+      try {
+         fhirPatientResp = await fetch(
+          `${import.meta.env.VITE_SERVER_URL}/fhir/Patient/$PATIENT_ID`,
+          {
+            method: "GET",
+            headers: {
+              authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        // Parse the Coverage response body
+        fhirPatientBody = await fhirPatientResp.json();
+      } catch (err) {
+        console.log("Patient error: ", err);
+        return;
+      }
+      if (!fhirPatientResp.ok) {
+        console.error(`Fetch failed with status: ${fhirPatientResp.status}`);
+        return;
+      }
+
 
       /*  Display some information coverage information
           see https://www.hl7.org/fhir/coverage.html for available fields */
       const coverageHTMLs = fhirCoverageBody?.entry?.map((entry) =>
-        displayCoverage(entry.resource as Coverage | undefined, patient)
+        displayCoverage(entry.resource as Coverage | undefined, fhirPatientBody)
       );
       const coverageListDiv = document.getElementById("coverage-list");
 
