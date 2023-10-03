@@ -79,7 +79,7 @@ function initializePage() {
       `;
 
       /*  Using the accessToken returned from `POST /flexpa-access-token` make a search request
-          to the patient's payer FHIR server through `https://api.flexpa.com/fhir`.
+          to the patient's payer FHIR server via your backend server.
           Include the `$PATIENT_ID` wildcard in the query parameter and the `accessToken` within the `authorization`
           HTTP header. */
       let fhirCoverageResp;

@@ -1,12 +1,12 @@
 import express, { Router, Request, Response } from 'express';
 import fetch from 'node-fetch';
-import { Bundle} from 'fhir/r4';
+import { Bundle } from 'fhir/r4';
 
 
 const router: Router = express.Router();
 
 /**
- * Handles FHIR requests
+ * Handles FHIR requests by proxying all requests to the patient's payer FHIR server via https://api.flexpa.com/fhir. This router also appends the received URL path to the outbound request URL.
  */
 router.use("/", async (req: Request, res: Response) => {
     const { authorization } = req.headers;
