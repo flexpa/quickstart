@@ -12,6 +12,7 @@ router.use("/fhir", async (req: Request, res: Response) => {
     const { authorization } = req.headers;
     const { path } = req;
     if (!authorization) return res.status(401).send('All requests must be authenticated.');
+console.log(req.url);
 
   // Call Flexpa FHIR API
   try {
@@ -26,6 +27,7 @@ router.use("/fhir", async (req: Request, res: Response) => {
     res.send(fhirBody);
   }
   catch (err) {
+    console.log(`Error retrieving FHIR: ${err}`);
     return res.status(500).send(`Error retrieving FHIR: ${err}`);
   }
 
