@@ -12,30 +12,6 @@ declare const FlexpaLink: {
   open: () => Record<string, unknown>;
 };
 
-  /**
-   *  This function retries a fetch request if the response is a 429 Too Many Requests.
-   *  This is necessary because the Flexpa API may return a 429 if the data has not yet been loaded into the cache.
-   */
-async function fetchWithRetry(url: string, options: RequestInit, maxRetries = 10) {
-  let retries = 0;
-  let delay = 1000;  // Initial delay is 1 second
-
-  while (retries < maxRetries) {
-    const response = await fetch(url, options);
-
-    if (response.status !== 429) {
-      return response;
-    }
-
-    const retryAfter = response.headers.get("Retry-After") || delay;
-    await new Promise(resolve => setTimeout(resolve, Number(retryAfter) * 1000));
-
-    retries++;
-    delay *= 2;  // Double the delay for exponential backoff
-  }
-
-  throw new Error("Max retries reached.");
-}
 
 
 function initializePage() {
@@ -111,7 +87,7 @@ function initializePage() {
       let fhirCoverageResp;
       let fhirCoverageBody: Bundle;
       try {
-         fhirCoverageResp = await fetchWithRetry(
+         fhirCoverageResp = await fetch(
           `${import.meta.env.VITE_SERVER_URL}/fhir/Coverage?patient=$PATIENT_ID`,
           {
             method: "GET",
@@ -137,7 +113,7 @@ function initializePage() {
       let fhirPatientResp;
       let fhirPatientBody: Patient;
       try {
-         fhirPatientResp = await fetchWithRetry(
+         fhirPatientResp = await fetch(
           `${import.meta.env.VITE_SERVER_URL}/fhir/Patient/$PATIENT_ID`,
           {
             method: "GET",
