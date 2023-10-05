@@ -1,5 +1,5 @@
-import {Bundle} from "fhir/r4";
-import express, {Request, Response, Router} from "express";
+import { Bundle } from "fhir/r4";
+import express, { Request, Response, Router } from "express";
 import fetch from "node-fetch";
 
 const router: Router = express.Router();
@@ -46,9 +46,10 @@ async function fetchWithRetry(
 }
 
 /**
- * Handles FHIR requests by proxying all requests to the patient's payer FHIR server via https://api.flexpa.com/fhir. This router also appends the received URL path to the outbound request URL.
+ * Handles FHIR requests by proxying all requests to the patient's payer FHIR server via https://api.flexpa.com/fhir.
+ * This router also appends the received URL path to the outbound request URL.
  */
-router.use("/", async (req: Request, res: Response) => {
+router.get("/", async (req: Request, res: Response) => {
   const { authorization } = req.headers;
   if (!authorization) {
     return res.status(401).send("All requests must be authenticated.");
