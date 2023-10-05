@@ -17,7 +17,7 @@ async function fetchWithRetry(
   let delay = 1;
   while (retries < maxRetries) {
     try {
-      console.log(`Fetching ${url}`);
+      console.log(`Fetching ${url}, retries: ${retries}`);
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -49,7 +49,7 @@ async function fetchWithRetry(
  * Handles FHIR requests by proxying all requests to the patient's payer FHIR server via https://api.flexpa.com/fhir.
  * This router also appends the received URL path to the outbound request URL.
  */
-router.get("/", async (req: Request, res: Response) => {
+router.get("*", async (req: Request, res: Response) => {
   const { authorization } = req.headers;
   if (!authorization) {
     return res.status(401).send("All requests must be authenticated.");
