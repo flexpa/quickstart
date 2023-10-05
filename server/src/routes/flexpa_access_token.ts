@@ -1,5 +1,5 @@
-import express, { Router, Request, Response } from 'express';
-import fetch from 'node-fetch';
+import express, { Request, Response, Router } from "express";
+import fetch from "node-fetch";
 
 const router: Router = express.Router();
 
@@ -15,20 +15,25 @@ interface FlexpaAccessTokenBody {
  * POST /flexpa-access-token
  * Exchanges your `publicToken` for an `access_token`
  */
-router.post("/flexpa-access-token", async (req: Request, res: Response) => {
+router.post("/", async (req: Request, res: Response) => {
   const { publicToken } = req.body as FlexpaAccessTokenBody;
 
   if (!publicToken) {
-    return res.status(400).send('Invalid Flexpa public token');
+    return res.status(400).send("Invalid Flexpa public token");
   }
 
   if (!process.env.FLEXPA_PUBLIC_API_BASE_URL) {
-    return res.status(500).send('Invalid public API base URL');
+    return res.status(500).send("Invalid public API base URL");
   }
+
+  const { href } = new URL(
+    "link/exchange",
+    process.env.FLEXPA_PUBLIC_API_BASE_URL,
+  );
 
   // Call Flexpa API's exchange endpoint to exchange your `publicToken` for an `access_token`
   try {
-    const resp = await fetch(`${process.env.FLEXPA_PUBLIC_API_BASE_URL}/link/exchange`, {
+    const resp = await fetch(href, {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -38,15 +43,13 @@ router.post("/flexpa-access-token", async (req: Request, res: Response) => {
         secret_key: process.env.FLEXPA_API_SECRET_KEY,
       }),
     });
-    const { access_token: accessToken, expires_in: expiresIn } = await resp.json() as LinkExchangeResponse;
+    const { access_token: accessToken, expires_in: expiresIn } =
+      (await resp.json()) as LinkExchangeResponse;
 
     res.send({ accessToken, expiresIn });
-  }
-  catch (err) {
+  } catch (err) {
     return res.status(500).send(`Error exchanging token: ${err}`);
   }
-
 });
-
 
 export default router;

@@ -1,6 +1,6 @@
-import express, { Router, Request, Response } from "express";
+import {Bundle} from "fhir/r4";
+import express, {Request, Response, Router} from "express";
 import fetch from "node-fetch";
-import { Bundle } from "fhir/r4";
 
 const router: Router = express.Router();
 
@@ -11,7 +11,7 @@ const router: Router = express.Router();
 async function fetchWithRetry(
   url: string,
   authorization: string,
-  maxRetries = 10
+  maxRetries = 10,
 ) {
   let retries = 0;
   let delay = 1;
@@ -32,7 +32,7 @@ async function fetchWithRetry(
       }
       const retryAfter = response.headers.get("Retry-After") || delay;
       await new Promise((resolve) =>
-        setTimeout(resolve, Number(retryAfter) * 1000)
+        setTimeout(resolve, Number(retryAfter) * 1000),
       );
       retries++;
       delay *= 2; // Double the delay for exponential backoff
@@ -50,16 +50,17 @@ async function fetchWithRetry(
  */
 router.use("/", async (req: Request, res: Response) => {
   const { authorization } = req.headers;
-  const { path } = req;
-  if (!authorization)
+  if (!authorization) {
     return res.status(401).send("All requests must be authenticated.");
+  }
 
-  // Call Flexpa FHIR API
+  const { href } = new URL(
+    `fhir${req.path}`,
+    process.env.FLEXPA_PUBLIC_API_BASE_URL,
+  );
+
   try {
-    const fhirResp = await fetchWithRetry(
-      `${process.env.FLEXPA_PUBLIC_API_BASE_URL}/fhir${path}`,
-      authorization
-    );
+    const fhirResp = await fetchWithRetry(href, authorization);
     const fhirBody: Bundle = await fhirResp.json();
     res.send(fhirBody);
   } catch (err) {
