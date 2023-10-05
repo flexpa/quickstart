@@ -1,5 +1,5 @@
 function displayFlexpaLinkButton() {
-  return (/* html */`
+  return /* html */ `
     <div class="link-section">
         <div id="flexpa-link-btn" class="launch-btn">
             <span class="icon-container">
@@ -13,6 +13,6 @@ function displayFlexpaLinkButton() {
         &nbsp;<a href="https://www.flexpa.com/docs/getting-started/test-mode#test-mode-logins" target="_blank">test mode login</a>&nbsp; 
         to authenticate in the modal that appears.
     </div>
-    `);
+    `;
 }
 export default displayFlexpaLinkButton;

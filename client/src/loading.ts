@@ -1,5 +1,5 @@
 const loading = () => {
-  return ( /* html */ `
+  return /* html */ `
   <div class="loading">
     <svg
         role="status"
@@ -18,7 +18,7 @@ const loading = () => {
         />
     </svg>
   </div>
-  `);
+  `;
 };
 
 export default loading;

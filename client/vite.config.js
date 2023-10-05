@@ -1,7 +1,7 @@
 const viteConfig = {
   server: {
-    port: `3000`
+    port: `3000`,
   },
-  envDir: "."
+  envDir: ".",
 };
 export default viteConfig;

@@ -15,7 +15,7 @@ declare const FlexpaLink: {
 function initializePage() {
   if (!import.meta.env.VITE_FLEXPA_PUBLISHABLE_KEY) {
     console.error(
-      "No publishable key found. Set VITE_FLEXPA_PUBLISHABLE_KEY in .env"
+      "No publishable key found. Set VITE_FLEXPA_PUBLISHABLE_KEY in .env",
     );
   }
   /**
@@ -37,7 +37,7 @@ function initializePage() {
               "content-type": "application/json",
             },
             body: JSON.stringify({ publicToken }),
-          }
+          },
         );
       } catch (err) {
         console.log("err", err);
@@ -79,7 +79,7 @@ function initializePage() {
       `;
 
       /*  Using the accessToken returned from `POST /flexpa-access-token` make a search request
-          to the patient's payer FHIR server via your backend server.
+          to the patient's payer FHIR server through `https://api.flexpa.com/fhir`.
           Include the `$PATIENT_ID` wildcard in the query parameter and the `accessToken` within the `authorization`
           HTTP header. */
       let fhirCoverageResp;
@@ -94,7 +94,7 @@ function initializePage() {
             headers: {
               authorization: `Bearer ${accessToken}`,
             },
-          }
+          },
         );
         // Parse the Coverage response body
         fhirCoverageBody = await fhirCoverageResp.json();
@@ -113,14 +113,14 @@ function initializePage() {
       let fhirPatientResp;
       let fhirPatientBody: Patient;
       try {
-         fhirPatientResp = await fetch(
+        fhirPatientResp = await fetch(
           `${import.meta.env.VITE_SERVER_URL}/fhir/Patient/$PATIENT_ID`,
           {
             method: "GET",
             headers: {
               authorization: `Bearer ${accessToken}`,
             },
-          }
+          },
         );
         // Parse the Coverage response body
         fhirPatientBody = await fhirPatientResp.json();
@@ -133,11 +133,13 @@ function initializePage() {
         return;
       }
 
-
       /*  Display some information coverage information
           see https://www.hl7.org/fhir/coverage.html for available fields */
       const coverageHTMLs = fhirCoverageBody?.entry?.map((entry) =>
-        displayCoverage(entry.resource as Coverage | undefined, fhirPatientBody)
+        displayCoverage(
+          entry.resource as Coverage | undefined,
+          fhirPatientBody,
+        ),
       );
       const coverageListDiv = document.getElementById("coverage-list");
 

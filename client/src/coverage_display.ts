@@ -1,7 +1,7 @@
-import { Coverage, Patient } from 'fhir/r4';
+import { Coverage, Patient } from "fhir/r4";
 
 function displayCoverage(coverage: Coverage | undefined, patient: Patient) {
-  if (!coverage || coverage.resourceType !== 'Coverage') {
+  if (!coverage || coverage.resourceType !== "Coverage") {
     return /* html */ `
         <div>
         Error: Undefined Resource
@@ -15,7 +15,9 @@ function displayCoverage(coverage: Coverage | undefined, patient: Patient) {
       <dt>ID</dt>
       <dd>${coverage.id}</dd>
       <dt>Period</dt>
-      <dd>${coverage.period?.start ?? ""} ${`- ${coverage.period?.end}` ?? ""}</dd>
+      <dd>${coverage.period?.start ?? ""} ${
+        `- ${coverage.period?.end}` ?? ""
+      }</dd>
       <dt>Type</dt>
       <dd>${coverage.type?.text ?? ""}</dd>
       <dt>Relationship</dt>
