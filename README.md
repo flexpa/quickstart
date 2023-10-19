@@ -1,6 +1,7 @@
 # <img src="./flexpa_logo.png" height="60px" align="center" alt="Flexpa logo"> Flexpa Quickstart
 
 This repository is a companion to Flexpa's [quickstart guide](https://www.flexpa.com/docs/guides/quickstart) which also provides a detailed explanation of how this code example works.
+Please use our [community discussions](https://github.com/flexpa/community/discussions) for support and issues with this code.
 
 ## Prerequisites
 
