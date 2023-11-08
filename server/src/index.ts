@@ -1,8 +1,8 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-import flexpaAccessToken from "./routes/flexpa_access_token.js";
-import fhirRouter from "./routes/fhir.js";
+import flexpaAccessToken from "./routes/flexpa_access_token";
+import fhirRouter from "./routes/fhir";
 import "dotenv/config";
 
 const app = express();

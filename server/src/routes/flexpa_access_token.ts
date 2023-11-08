@@ -1,5 +1,4 @@
 import express, { Request, Response, Router } from "express";
-import fetch from "node-fetch";
 
 const router: Router = express.Router();
 
