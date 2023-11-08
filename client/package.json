@@ -10,7 +10,7 @@
     "lint:fix": "eslint . --fix"
   },
   "devDependencies": {
-    "@types/fhir": "^0.0.39",
+    "@types/fhir": "^3.0.2",
     "@typescript-eslint/eslint-plugin": "^6.10.0",
     "@typescript-eslint/parser": "^6.10.0",
     "eslint": "^8.25.0",
