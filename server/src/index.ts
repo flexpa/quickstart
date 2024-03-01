@@ -18,6 +18,9 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use("/flexpa-access-token", flexpaAccessToken);
 app.use("/fhir", fhirRouter);
+app.use("/", (_req, res) => {
+  res.send("Ok");
+});
 
 app.listen(9000, "0.0.0.0", () => {
   console.log("Server listening on http://localhost:9000");
