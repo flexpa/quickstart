@@ -19,7 +19,8 @@ app.use(bodyParser.json());
 app.use("/flexpa-access-token", flexpaAccessToken);
 app.use("/fhir", fhirRouter);
 app.use("/", (_req, res) => {
-  res.send("Ok");
+  console.log("Alive");
+  res.send("ok");
 });
 
 app.listen(9000, "0.0.0.0", () => {
