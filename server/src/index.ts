@@ -18,7 +18,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use("/flexpa-access-token", flexpaAccessToken);
 app.use("/fhir", fhirRouter);
-app.use("/", (_req, res) => {
+app.use("/healthcheck", (_req, res) => {
   console.log("Alive");
   res.send("ok");
 });
