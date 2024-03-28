@@ -5,5 +5,8 @@ export interface LinkExchangeResponse {
 
 export interface FlexpaConfig {
   publishableKey: string;
+  user: {
+    externalId: string;
+  };
   onSuccess: (publicToken: string) => Promise | unknown;
 }
