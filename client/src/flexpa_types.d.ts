@@ -8,5 +8,6 @@ export interface FlexpaConfig {
   user: {
     externalId: string;
   };
+  usage: 'ONE_TIME';
   onSuccess: (publicToken: string) => Promise | unknown;
 }
