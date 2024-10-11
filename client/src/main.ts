@@ -27,6 +27,7 @@ function initializePage() {
     user: {
       externalId: 'usr_1234'
     },
+    usage: 'ONE_TIME',
     onSuccess: async (publicToken: string) => {
       /*  Make a request to the `POST /flexpa-access-token` endpoint that we wrote in `server`.
           include the `publicToken` in the body. */
