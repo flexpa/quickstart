@@ -1,6 +1,6 @@
 import 'server-only'
  
-import { getSession } from '@/app/lib/session'
+import { getSession } from '@/lib/session'
 import { redirect } from 'next/navigation'
 import { cache } from 'react'
  

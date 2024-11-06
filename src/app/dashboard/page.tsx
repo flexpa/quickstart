@@ -1,7 +1,7 @@
 'use server'
 
 import { cookies } from 'next/headers'
-import { decrypt } from '../lib/session';
+import { decrypt } from '@/lib/session';
 import { decodeJwt } from 'jose';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ApiRequests } from '@/components/api-requests'

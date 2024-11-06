@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import FlexpaClient from '@flexpa/node-sdk'
-import { getSession } from '@/app/lib/session';
+import { getSession } from '@/lib/session';
 
 export async function GET() {
   const session = await getSession();

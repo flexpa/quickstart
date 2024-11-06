@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import FlexpaClient from '@flexpa/node-sdk'
-import { createSession } from '@/app/lib/session';
+import { createSession } from '@/lib/session';
 
 export async function POST(request: Request) {
   try {
