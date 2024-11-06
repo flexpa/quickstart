@@ -4,7 +4,6 @@
 ARG NODE_VERSION=22.11.0
 FROM node:${NODE_VERSION}-slim AS base
 
-ENV lol=lol
 
 LABEL fly_launch_runtime="Next.js"
 
