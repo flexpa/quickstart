@@ -1,8 +1,10 @@
 # syntax = docker/dockerfile:1
 
 # Adjust NODE_VERSION as desired
-ARG NODE_VERSION=20.18.0
-FROM node:${NODE_VERSION}-slim as base
+ARG NODE_VERSION=22.11.0
+FROM node:${NODE_VERSION}-slim AS base
+
+ENV lol=lol
 
 LABEL fly_launch_runtime="Next.js"
 
@@ -13,7 +15,7 @@ WORKDIR /app
 ENV NODE_ENV="production"
 
 # Throw-away build stage to reduce size of final image
-FROM base as build
+FROM base AS build
 
 ARG NEXT_PUBLIC_FLEXPA_PUBLISHABLE_KEY
 ENV NEXT_PUBLIC_FLEXPA_PUBLISHABLE_KEY=$NEXT_PUBLIC_FLEXPA_PUBLISHABLE_KEY
@@ -24,7 +26,7 @@ RUN apt-get update -qq && \
 
 # Install node modules
 COPY package-lock.json package.json ./
-RUN npm ci --include=optional
+RUN npm install
 
 # Copy application code
 COPY . .
@@ -34,7 +36,6 @@ RUN npm run build
 
 # Remove development dependencies
 RUN npm prune --omit=dev
-
 
 # Final stage for app image
 FROM base
