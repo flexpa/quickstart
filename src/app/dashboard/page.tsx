@@ -5,6 +5,7 @@ import { decrypt } from '../lib/session';
 import { decodeJwt } from 'jose';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ApiRequests } from '@/components/api-requests'
+import { AccessTokenDisplay } from '@/components/access-token-display'
 
 export default async function Dashboard() {
   const token = await decrypt((await cookies()).get('session')?.value);
@@ -26,7 +27,7 @@ export default async function Dashboard() {
             <CardTitle>Patient Authorization</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-[100px_1fr] gap-4">
+            <div className="grid grid-cols-[100px_1fr] gap-4 items-center">
               <div className="text-sm font-medium text-muted-foreground">ID</div>
               <div className="font-mono text-sm">{decoded.sub as string}</div>
 
@@ -34,7 +35,7 @@ export default async function Dashboard() {
               <div className="font-mono text-sm">{decoded.patient as string}</div>
 
               <div className="text-sm font-medium text-muted-foreground">Access Token</div>
-              <div className="font-mono text-sm whitespace-pre-wrap break-all">{token?.accessToken as string}</div>
+              <AccessTokenDisplay token={token?.accessToken as string} />
             </div>
           </CardContent>
         </Card>

@@ -1,6 +1,6 @@
 'use client';
 
-import { Copy } from 'lucide-react';
+import { Copy, Check } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
@@ -32,6 +32,7 @@ const getResourceCounts = (bundle: Bundle) => {
 export default function Everything() {
   const [isLoading, setIsLoading] = useState(false);
   const [everythingData, setEverythingData] = useState<Bundle | null>(null);
+  const [hasCopied, setHasCopied] = useState(false);
 
   const handleEverythingRequest = async () => {
     try {
@@ -47,6 +48,12 @@ export default function Everything() {
     }
   };
 
+  const handleCopy = async () => {
+    handleCopyJson(everythingData);
+    setHasCopied(true);
+    setTimeout(() => setHasCopied(false), 2000);
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -54,10 +61,10 @@ export default function Everything() {
           <div className="flex items-center gap-3">
             <Badge variant="outline">GET</Badge>
             <span className="font-semibold">$everything</span>
-            <span className="text-muted-foreground font-mono text-sm">
-              /fhir/Patient/$everything
-            </span>
           </div>
+          <span className="text-muted-foreground font-mono text-sm">
+            /fhir/Patient/$PATIENT_ID/$everything
+          </span>
           <p className="text-sm text-muted-foreground">
             Retrieve all of the patient data in one request.
           </p>
@@ -66,10 +73,19 @@ export default function Everything() {
           <div className="flex items-center gap-2">
             <Button
               variant="outline"
-              onClick={() => handleCopyJson(everythingData)}
+              onClick={handleCopy}
             >
-              <Copy className="h-4 w-4" />
-              Copy JSON
+              {hasCopied ? (
+                <>
+                  <Check className="h-4 w-4" />
+                  Copied!
+                </>
+              ) : (
+                <>
+                  <Copy className="h-4 w-4" />
+                  Copy JSON
+                </>
+              )}
             </Button>
           </div>
         ) : (
