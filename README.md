@@ -23,6 +23,10 @@ git clone https://github.com/flexpa/quickstart.git
 ## Setup
 Copy the `.env.example` file to `.env` and add your API keys.
 
+```bash
+cp .env.example .env
+```
+
 You must generate a random value for `SESSION_SECRET` in `.env`. One way is to use the following command:
 
 ```bash
