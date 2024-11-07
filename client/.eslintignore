@@ -1,5 +1,0 @@
-# don't lint node_modules
-node_modules
-
-# don't lint tests
-__tests__
