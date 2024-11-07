@@ -18,7 +18,7 @@ export default async function Dashboard() {
         <h1 className="text-4xl font-bold mb-2">Flexpa Quickstart</h1>
         <p className="text-xl mb-6">Patient Authorization</p>
         <p className="text-gray-600 mb-8">
-          Congrats! By linking a health insurance plan, you have created a <a href="https://docs.flexpa.com/reference/patient-authorization" className="text-black font-semibold underline">Patient Authorization</a>.
+          Congrats! By linking a health insurance plan, you have created a Patient Authorization.
           This represents a user&apos;s consent to share their health data with you.
         </p>
 
