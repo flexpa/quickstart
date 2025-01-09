@@ -10,9 +10,13 @@
   "dependencies": {
     "@flexpa/link": "^1.0.2",
     "@flexpa/node-sdk": "^0.0.2",
+    "@medplum/core": "^3.2.27",
+    "@radix-ui/react-accordion": "^1.2.2",
+    "@radix-ui/react-scroll-area": "^1.2.2",
     "@radix-ui/react-select": "^2.1.2",
     "@radix-ui/react-separator": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",
+    "@radix-ui/react-tabs": "^1.1.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "jose": "^5.9.6",
