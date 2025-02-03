@@ -11,6 +11,7 @@ export function LaunchLink() {
   function open() {
     FlexpaLink.create({
       publishableKey: process.env.NEXT_PUBLIC_FLEXPA_PUBLISHABLE_KEY!,
+      usage: 'ONE_TIME',
       user: { externalId: crypto.randomUUID() },
       onSuccess: async (publicToken: string) => {
         await fetch('/api/exchange', { method: 'POST', body: JSON.stringify({ publicToken }) })
