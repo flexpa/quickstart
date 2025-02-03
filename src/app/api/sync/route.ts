@@ -9,7 +9,7 @@ export const medplum = new MedplumClient({
   clientSecret: process.env.MEDPLUM_CLIENT_SECRET
 });
 
-export async function POST(request: Request) {
+export async function POST() {
   const session = await getSession();
 
   if (!session?.accessToken) {
