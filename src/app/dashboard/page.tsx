@@ -10,11 +10,14 @@ import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { CopyButton } from '@/components/copy-button'
 import MedplumSync from '@/components/medplum-sync';
+import GoogleFhirSync from '@/components/google-fhir-sync';
 
 export default async function Dashboard() {
-  const token = await decrypt((await cookies()).get('session')?.value);
-  const decoded = decodeJwt(token?.accessToken as string);
+  const sessionCookie = (await cookies()).get('session');
+  const token = sessionCookie ? await decrypt(sessionCookie.value) : null;
+  const decoded = token?.accessToken ? decodeJwt(token.accessToken as string) : null;
   const isMedplumConfigured = process.env.MEDPLUM_CLIENT_ID && process.env.MEDPLUM_CLIENT_SECRET;
+  const isGoogleFhirConfigured = process.env.NEXT_PUBLIC_GOOGLE_FHIR_STORE_URL;
 
   return (
     <div className="min-h-screen bg-gray-50/50">
@@ -59,17 +62,17 @@ export default async function Dashboard() {
                     <div className="text-sm font-medium text-muted-foreground">Authorization ID</div>
                     <div className="flex items-center gap-2">
                       <code className="flex-1 relative rounded bg-muted px-3 py-2 font-mono text-sm">
-                        {decoded.sub as string}
+                        {decoded?.sub?.toString() || ''}
                       </code>
-                      <CopyButton value={decoded.sub as string} />
+                      <CopyButton value={decoded?.sub?.toString() || ''} />
                     </div>
 
                     <div className="text-sm font-medium text-muted-foreground">Patient ID</div>
                     <div className="flex items-center gap-2">
                       <code className="flex-1 relative rounded bg-muted px-3 py-2 font-mono text-sm">
-                        {decoded.patient as string}
+                        {decoded?.patient?.toString() || ''}
                       </code>
-                      <CopyButton value={decoded.patient as string} />
+                      <CopyButton value={decoded?.patient?.toString() || ''} />
                     </div>
 
                     <div className="text-sm font-medium text-muted-foreground">Access Token</div>
@@ -132,6 +135,35 @@ export default async function Dashboard() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Google FHIR Sync Card */}
+          {isGoogleFhirConfigured && (
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle>Google FHIR Store Integration</CardTitle>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Store your Flexpa health records in a secure, HIPAA-compliant FHIR server using Google Cloud Healthcare API. While Flexpa helps you retrieve claims, coverage, and clinical records from health plans, Google FHIR Store provides a fully-managed FHIR server with built-in data modeling, search capabilities, and healthcare-specific features that make it ideal for storing and working with claims data.
+                    </p>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  <div className="rounded-lg border bg-muted/50 p-4">
+                    <div className="space-y-4">
+                      <p className="text-sm">
+                        This integration allows you to maintain and manage patient data in a fully compliant environment. Once synced, click on a resource ID to view the data in Google Cloud Console.
+                      </p>
+                    </div>
+                  </div>
+
+                  <GoogleFhirSync />
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           {/* Medplum Sync Card */}
           {isMedplumConfigured && (
