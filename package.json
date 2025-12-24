@@ -8,7 +8,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@flexpa/link": "^1.1.2",
+    "@flexpa/link": "^1.1.3",
     "@flexpa/node-sdk": "^0.0.2",
     "@medplum/core": "^3.3.0",
     "@radix-ui/react-accordion": "^1.2.12",
@@ -36,7 +36,7 @@
     "eslint": "^8",
     "eslint-config-next": "15.5.6",
     "postcss": "^8",
-    "tailwindcss": "^3.4.18",
+    "tailwindcss": "^3.4.19",
     "typescript": "^5"
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
