@@ -8,8 +8,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@flexpa/link": "^1.1.2",
-    "@flexpa/node-sdk": "^0.0.2",
+    "@flexpa/node-sdk": "^1.0.0",
     "@medplum/core": "^3.3.0",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-scroll-area": "^1.2.10",

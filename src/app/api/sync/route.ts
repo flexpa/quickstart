@@ -4,12 +4,12 @@ import { MedplumClient } from '@medplum/core';
 import { getSession } from '@/lib/session';
 import { Bundle, FhirResource } from 'fhir/r4';
 
-export const medplum = new MedplumClient({
+const medplum = new MedplumClient({
   clientId: process.env.MEDPLUM_CLIENT_ID,
   clientSecret: process.env.MEDPLUM_CLIENT_SECRET
 });
 
-export async function POST(request: Request) {
+export async function POST(_request: Request) {
   const session = await getSession();
 
   if (!session?.accessToken) {
