@@ -1,0 +1,61 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+
+language: en-US
+early_access: false
+
+tone_instructions: 'Direct and concise. Use labels: **issue**, **suggestion**, **nit**, **question**, **thought**, **praise**. Explain the why. No padding.'
+
+reviews:
+  profile: assertive
+
+  # Auto-approve once CodeRabbit comments are resolved
+  request_changes_workflow: true
+
+  high_level_summary: true
+  review_status: true
+  commit_status: true
+  fail_commit_status: false
+  sequence_diagrams: false
+  estimate_code_review_effort: false
+  related_issues: true
+  related_prs: true
+
+  suggested_labels: false
+  suggested_reviewers: false
+  poem: false
+  in_progress_fortune: false
+
+  auto_review:
+    enabled: true
+    auto_incremental_review: true
+    drafts: false
+    ignore_title_keywords:
+      - WIP
+      - DO NOT MERGE
+    ignore_usernames:
+      - dependabot[bot]
+      - renovate[bot]
+
+  tools:
+    eslint:
+      enabled: true
+    shellcheck:
+      enabled: true
+    gitleaks:
+      enabled: true
+
+  finishing_touches:
+    docstrings:
+      enabled: false
+    unit_tests:
+      enabled: false
+
+chat:
+  auto_reply: true
+
+knowledge_base:
+  opt_out: true
+  learnings:
+    scope: local
+  pull_requests:
+    scope: local
