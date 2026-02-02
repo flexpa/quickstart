@@ -21,7 +21,7 @@ export default function Home() {
           where you can select your health plan and authorize access to your claims data.
         </p>
         <Button onClick={handleConnect}>
-          Connect Health Plan <ExternalLink className="ml-2 h-4 w-4" />
+          Launch Consent <ExternalLink className="ml-2 h-4 w-4" />
         </Button>
       </div>
     </div>
