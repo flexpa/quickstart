@@ -64,3 +64,24 @@ export async function deleteSession() {
   const cookieStore = await cookies()
   cookieStore.delete('session')
 }
+
+export async function setCodeVerifier(codeVerifier: string) {
+  const cookieStore = await cookies()
+  cookieStore.set('flexpa_code_verifier', codeVerifier, {
+    httpOnly: true,
+    secure: false,
+    maxAge: 60 * 10, // 10 minutes
+    sameSite: 'lax',
+    path: '/',
+  })
+}
+
+export async function getCodeVerifier() {
+  const cookieStore = await cookies()
+  return cookieStore.get('flexpa_code_verifier')?.value
+}
+
+export async function deleteCodeVerifier() {
+  const cookieStore = await cookies()
+  cookieStore.delete('flexpa_code_verifier')
+}
