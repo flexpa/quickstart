@@ -41,7 +41,7 @@ export async function createSession(accessToken: string) {
 
   cookieStore.set('session', session, {
     httpOnly: true,
-    secure: false,
+    secure: process.env.NODE_ENV === 'production',
     expires: expiresAt,
     sameSite: 'lax',
     path: '/',
@@ -69,7 +69,7 @@ export async function setCodeVerifier(codeVerifier: string) {
   const cookieStore = await cookies();
   cookieStore.set('flexpa_code_verifier', codeVerifier, {
     httpOnly: true,
-    secure: false,
+    secure: process.env.NODE_ENV === 'production',
     maxAge: 60 * 10, // 10 minutes
     sameSite: 'lax',
     path: '/',
