@@ -1,12 +1,14 @@
 'use server';
 
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 import MedplumSync from '@/components/medplum-sync';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { decrypt } from '@/lib/session';
 
 export default async function Dashboard() {
-  await decrypt((await cookies()).get('session')?.value);
+  const token = await decrypt((await cookies()).get('session')?.value);
+  if (!token?.accessToken) redirect('/');
 
   return (
     <div className="container mx-auto px-4 py-6 max-w-5xl">

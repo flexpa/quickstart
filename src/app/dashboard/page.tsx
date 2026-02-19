@@ -3,6 +3,7 @@
 import { decodeJwt } from 'jose';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { AccessTokenDisplay } from '@/components/access-token-display';
 import { ApiRequests } from '@/components/api-requests';
 import { CopyButton } from '@/components/copy-button';
@@ -13,7 +14,11 @@ import { decrypt } from '@/lib/session';
 
 export default async function Dashboard() {
   const token = await decrypt((await cookies()).get('session')?.value);
-  const decoded = decodeJwt(token?.accessToken as string);
+  if (!token?.accessToken) redirect('/');
+  const decoded = decodeJwt(token.accessToken);
+  if (typeof decoded.sub !== 'string' || typeof decoded.patient !== 'string') {
+    redirect('/');
+  }
   const isMedplumConfigured =
     process.env.MEDPLUM_CLIENT_ID && process.env.MEDPLUM_CLIENT_SECRET;
 
@@ -80,9 +85,9 @@ export default async function Dashboard() {
                     </div>
                     <div className="flex items-center gap-2">
                       <code className="flex-1 relative rounded bg-muted px-3 py-2 font-mono text-sm">
-                        {decoded.sub as string}
+                        {decoded.sub}
                       </code>
-                      <CopyButton value={decoded.sub as string} />
+                      <CopyButton value={decoded.sub} />
                     </div>
 
                     <div className="text-sm font-medium text-muted-foreground">
@@ -90,9 +95,9 @@ export default async function Dashboard() {
                     </div>
                     <div className="flex items-center gap-2">
                       <code className="flex-1 relative rounded bg-muted px-3 py-2 font-mono text-sm">
-                        {decoded.patient as string}
+                        {decoded.patient}
                       </code>
-                      <CopyButton value={decoded.patient as string} />
+                      <CopyButton value={decoded.patient} />
                     </div>
 
                     <div className="text-sm font-medium text-muted-foreground">
@@ -100,11 +105,9 @@ export default async function Dashboard() {
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="flex-1 relative rounded bg-muted px-3 py-2">
-                        <AccessTokenDisplay
-                          token={token?.accessToken as string}
-                        />
+                        <AccessTokenDisplay token={token.accessToken} />
                       </div>
-                      <CopyButton value={token?.accessToken as string} />
+                      <CopyButton value={token.accessToken} />
                     </div>
                   </div>
                 </div>

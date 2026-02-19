@@ -4,7 +4,9 @@ import 'server-only';
 import { type JWTPayload, jwtVerify, SignJWT } from 'jose';
 import { cookies } from 'next/headers';
 
-const secretKey = process.env.SESSION_SECRET;
+import { requiredEnv } from './env';
+
+const secretKey = requiredEnv('SESSION_SECRET');
 const encodedKey = new TextEncoder().encode(secretKey);
 
 interface SessionPayload extends JWTPayload {
@@ -19,12 +21,14 @@ export async function encrypt(payload: SessionPayload) {
     .sign(encodedKey);
 }
 
-export async function decrypt(session: string | undefined = '') {
+export async function decrypt(
+  session: string | undefined = '',
+): Promise<SessionPayload | undefined> {
   try {
     const { payload } = await jwtVerify(session, encodedKey, {
       algorithms: ['HS256'],
     });
-    return payload;
+    return payload as SessionPayload;
   } catch {
     console.log('Failed to verify session');
   }

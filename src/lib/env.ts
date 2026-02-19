@@ -4,6 +4,8 @@ function requiredEnv(name: string): string {
   return value;
 }
 
+export { requiredEnv };
+
 export const env = {
   publishableKey: requiredEnv('NEXT_PUBLIC_FLEXPA_PUBLISHABLE_KEY'),
   redirectUri: requiredEnv('NEXT_PUBLIC_REDIRECT_URI'),
