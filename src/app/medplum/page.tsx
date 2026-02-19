@@ -1,9 +1,9 @@
-'use server'
+'use server';
 
-import { cookies } from 'next/headers'
-import { decrypt } from '@/lib/session';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { cookies } from 'next/headers';
 import MedplumSync from '@/components/medplum-sync';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { decrypt } from '@/lib/session';
 
 export default async function Dashboard() {
   await decrypt((await cookies()).get('session')?.value);
@@ -20,9 +20,11 @@ export default async function Dashboard() {
 
         <div className="prose max-w-none">
           <p>
-            The Medplum Sync feature allows you to synchronize your health records from Flexpa to your Medplum instance.
-            This enables you to maintain a consistent view of patient data across both platforms while leveraging
-            Medplum&apos;s powerful data management capabilities.
+            The Medplum Sync feature allows you to synchronize your health
+            records from Flexpa to your Medplum instance. This enables you to
+            maintain a consistent view of patient data across both platforms
+            while leveraging Medplum&apos;s powerful data management
+            capabilities.
           </p>
         </div>
 
@@ -36,5 +38,5 @@ export default async function Dashboard() {
         </Card>
       </div>
     </div>
-  )
+  );
 }
