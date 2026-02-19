@@ -1,14 +1,20 @@
 'use client';
 
-import { Copy, Check, ArrowRight, FileJson, LayoutDashboard, Timer } from 'lucide-react';
+import type { Bundle, ExplanationOfBenefit } from 'fhir/r4';
+import {
+  ArrowRight,
+  Check,
+  Copy,
+  FileJson,
+  LayoutDashboard,
+  Timer,
+} from 'lucide-react';
+import { useState } from 'react';
+import { handleCopyJson } from '@/components/api-requests';
+import { CurlExample } from '@/components/curl-example';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
-import { Bundle, ExplanationOfBenefit } from 'fhir/r4';
-import { handleCopyJson } from '@/components/api-requests';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { CurlExample } from '@/components/curl-example';
 import {
   Table,
   TableBody,
@@ -17,10 +23,13 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function EobRequest() {
   const [isLoading, setIsLoading] = useState(false);
-  const [eobData, setEobData] = useState<Bundle<ExplanationOfBenefit> | null>(null);
+  const [eobData, setEobData] = useState<Bundle<ExplanationOfBenefit> | null>(
+    null,
+  );
   const [hasCopied, setHasCopied] = useState(false);
   const [latencyMs, setLatencyMs] = useState<number | null>(null);
 
@@ -67,7 +76,9 @@ export default function EobRequest() {
       <div className="space-y-1">
         <div className="flex items-center gap-3">
           <Badge variant="outline">GET</Badge>
-          <code className="relative rounded bg-muted px-[0.5rem] py-[0.3rem] font-mono text-sm">ExplanationOfBenefit</code>
+          <code className="relative rounded bg-muted px-[0.5rem] py-[0.3rem] font-mono text-sm">
+            ExplanationOfBenefit
+          </code>
         </div>
         <div className="flex items-center gap-2 text-muted-foreground">
           <code className="text-xs font-mono">/fhir/ExplanationOfBenefit</code>
@@ -76,14 +87,14 @@ export default function EobRequest() {
         </div>
       </div>
 
-      <CurlExample 
+      <CurlExample
         method="GET"
         url="https://api.flexpa.com/fhir/ExplanationOfBenefit"
       />
 
       {!eobData && (
-        <Button 
-          onClick={handleEobRequest} 
+        <Button
+          onClick={handleEobRequest}
           disabled={isLoading}
           className="min-w-[120px]"
         >
@@ -91,7 +102,7 @@ export default function EobRequest() {
         </Button>
       )}
 
-      {eobData && eobData.entry && eobData.entry.length > 0 && (
+      {eobData?.entry && eobData.entry.length > 0 && (
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <h3 className="font-semibold">Response Overview</h3>
@@ -113,7 +124,10 @@ export default function EobRequest() {
           <Tabs defaultValue="overview" className="w-full">
             <div className="flex items-center justify-between">
               <TabsList>
-                <TabsTrigger value="overview" className="flex items-center gap-2">
+                <TabsTrigger
+                  value="overview"
+                  className="flex items-center gap-2"
+                >
                   <LayoutDashboard className="h-4 w-4" />
                   Overview
                 </TabsTrigger>
@@ -123,11 +137,7 @@ export default function EobRequest() {
                 </TabsTrigger>
               </TabsList>
 
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={handleCopy}
-              >
+              <Button variant="outline" size="icon" onClick={handleCopy}>
                 {hasCopied ? (
                   <Check className="h-4 w-4" />
                 ) : (

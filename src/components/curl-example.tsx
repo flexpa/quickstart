@@ -31,4 +31,4 @@ export function CurlExample({ method, url, body }: CurlExampleProps) {
       <CopyButton value={getCurlCommand()} />
     </div>
   );
-} 
+}

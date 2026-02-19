@@ -1,21 +1,25 @@
 'use client';
 
-import { Copy, Check, ArrowRight, FileJson, ChevronRight, Search, Timer, LayoutDashboard } from 'lucide-react';
+import type { Bundle, FhirResource } from 'fhir/r4';
+import {
+  ArrowRight,
+  Check,
+  ChevronRight,
+  Copy,
+  FileJson,
+  LayoutDashboard,
+  Search,
+  Timer,
+} from 'lucide-react';
+import { useState } from 'react';
+import { handleCopyJson } from '@/components/api-requests';
+import { CurlExample } from '@/components/curl-example';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
-import { Bundle, FhirResource } from 'fhir/r4';
-import { handleCopyJson } from '@/components/api-requests';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
-import { CurlExample } from '@/components/curl-example';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-} from '@/components/ui/table';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface ResourceInfo {
   type: string;
@@ -24,26 +28,29 @@ interface ResourceInfo {
 }
 
 const getResourceInfo = (bundle: Bundle): ResourceInfo[] => {
-  const resourceMap = new Map<string, {
-    count: number;
-    examples: FhirResource[];
-  }>();
+  const resourceMap = new Map<
+    string,
+    {
+      count: number;
+      examples: FhirResource[];
+    }
+  >();
 
   bundle.entry?.forEach((entry) => {
     const resource = entry.resource;
     if (!resource?.resourceType) return;
 
-    if (!resourceMap.has(resource.resourceType)) {
-      resourceMap.set(resource.resourceType, {
-        count: 1,
-        examples: [resource]
-      });
-    } else {
-      const info = resourceMap.get(resource.resourceType)!;
+    const info = resourceMap.get(resource.resourceType);
+    if (info) {
       info.count++;
       if (info.examples.length < 3) {
         info.examples.push(resource);
       }
+    } else {
+      resourceMap.set(resource.resourceType, {
+        count: 1,
+        examples: [resource],
+      });
     }
   });
 
@@ -52,7 +59,7 @@ const getResourceInfo = (bundle: Bundle): ResourceInfo[] => {
     .map(([type, info]) => ({
       type,
       count: info.count,
-      examples: info.examples
+      examples: info.examples,
     }));
 };
 
@@ -64,20 +71,20 @@ const createBundlePreview = (bundle: Bundle) => {
     total: bundle.total,
     entry: [
       // Show first entry as example
-      ...(bundle.entry?.slice(0, 1).map(entry => ({
+      ...(bundle.entry?.slice(0, 1).map((entry) => ({
         fullUrl: entry.fullUrl,
         resource: {
           resourceType: entry.resource?.resourceType,
           id: entry.resource?.id,
           // Show this is truncated
-          "...": "..."
-        }
+          '...': '...',
+        },
       })) || []),
       // Show there are more entries
       {
-        "...": `${(bundle.entry?.length || 0) - 1} more entries`
-      }
-    ]
+        '...': `${(bundle.entry?.length || 0) - 1} more entries`,
+      },
+    ],
   };
 };
 
@@ -86,7 +93,9 @@ export default function Everything() {
   const [everythingData, setEverythingData] = useState<Bundle | null>(null);
   const [hasCopied, setHasCopied] = useState(false);
   const [hasResourceCopied, setHasResourceCopied] = useState(false);
-  const [selectedResource, setSelectedResource] = useState<ResourceInfo | null>(null);
+  const [selectedResource, setSelectedResource] = useState<ResourceInfo | null>(
+    null,
+  );
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedExample, setSelectedExample] = useState(0);
   const [latencyMs, setLatencyMs] = useState<number | null>(null);
@@ -122,8 +131,8 @@ export default function Everything() {
   };
 
   const renderResourceTable = (resources: ResourceInfo[]) => {
-    const filteredResources = resources.filter(r => 
-      r.type.toLowerCase().includes(searchQuery.toLowerCase())
+    const filteredResources = resources.filter((r) =>
+      r.type.toLowerCase().includes(searchQuery.toLowerCase()),
     );
 
     return (
@@ -142,17 +151,15 @@ export default function Everything() {
           <Table>
             <TableBody>
               {filteredResources.map((resource) => (
-                <TableRow 
-                  key={resource.type} 
+                <TableRow
+                  key={resource.type}
                   className={`group cursor-pointer ${selectedResource?.type === resource.type ? 'bg-muted' : 'hover:bg-muted/50'}`}
                   onClick={() => {
                     setSelectedResource(resource);
                     setSelectedExample(0);
                   }}
                 >
-                  <TableCell className="font-mono">
-                    {resource.type}
-                  </TableCell>
+                  <TableCell className="font-mono">{resource.type}</TableCell>
                   <TableCell className="text-muted-foreground w-[100px] text-right">
                     <Badge variant="secondary" className="font-mono">
                       {resource.count}
@@ -172,7 +179,9 @@ export default function Everything() {
             <div className="mb-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h4 className="font-mono text-sm mb-1">{selectedResource.type}</h4>
+                  <h4 className="font-mono text-sm mb-1">
+                    {selectedResource.type}
+                  </h4>
                   <p className="text-sm text-muted-foreground">
                     {selectedResource.count} resources found
                   </p>
@@ -191,10 +200,12 @@ export default function Everything() {
                   </Button>
                   {selectedResource.examples.length > 1 && (
                     <div className="flex gap-1">
-                      {selectedResource.examples.map((_, idx) => (
+                      {selectedResource.examples.map((example, idx) => (
                         <Button
-                          key={idx}
-                          variant={selectedExample === idx ? "secondary" : "ghost"}
+                          key={`example-${example.resourceType}-${idx}`}
+                          variant={
+                            selectedExample === idx ? 'secondary' : 'ghost'
+                          }
                           size="sm"
                           onClick={() => setSelectedExample(idx)}
                         >
@@ -208,7 +219,11 @@ export default function Everything() {
             </div>
             <ScrollArea className="h-[500px] rounded-md border p-4">
               <pre className="text-sm font-mono whitespace-pre-wrap">
-                {JSON.stringify(selectedResource.examples[selectedExample], null, 2)}
+                {JSON.stringify(
+                  selectedResource.examples[selectedExample],
+                  null,
+                  2,
+                )}
               </pre>
             </ScrollArea>
           </div>
@@ -222,23 +237,27 @@ export default function Everything() {
       <div className="space-y-1">
         <div className="flex items-center gap-3">
           <Badge variant="outline">GET</Badge>
-          <code className="relative rounded bg-muted px-[0.5rem] py-[0.3rem] font-mono text-sm">$everything</code>
+          <code className="relative rounded bg-muted px-[0.5rem] py-[0.3rem] font-mono text-sm">
+            $everything
+          </code>
         </div>
         <div className="flex items-center gap-2 text-muted-foreground">
-          <code className="text-xs font-mono">/fhir/Patient/$PATIENT_ID/$everything</code>
+          <code className="text-xs font-mono">
+            /fhir/Patient/$PATIENT_ID/$everything
+          </code>
           <ArrowRight className="h-3 w-3" />
           <span className="text-xs">Comprehensive patient record</span>
         </div>
       </div>
 
-      <CurlExample 
+      <CurlExample
         method="GET"
         url="https://api.flexpa.com/fhir/Patient/$PATIENT_ID/$everything"
       />
 
       {!everythingData && (
-        <Button 
-          onClick={handleEverythingRequest} 
+        <Button
+          onClick={handleEverythingRequest}
           disabled={isLoading}
           className="min-w-[120px]"
         >
@@ -268,7 +287,10 @@ export default function Everything() {
           <Tabs defaultValue="resources" className="w-full">
             <div className="flex items-center justify-between">
               <TabsList>
-                <TabsTrigger value="resources" className="flex items-center gap-2">
+                <TabsTrigger
+                  value="resources"
+                  className="flex items-center gap-2"
+                >
                   <LayoutDashboard className="h-4 w-4" />
                   Overview
                 </TabsTrigger>
@@ -278,11 +300,7 @@ export default function Everything() {
                 </TabsTrigger>
               </TabsList>
 
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={handleCopy}
-              >
+              <Button variant="outline" size="icon" onClick={handleCopy}>
                 {hasCopied ? (
                   <Check className="h-4 w-4" />
                 ) : (
@@ -302,7 +320,8 @@ export default function Everything() {
                 </pre>
               </ScrollArea>
               <p className="text-xs text-muted-foreground mt-2">
-                Simplified Bundle structure. Use the Resources tab to explore contents.
+                Simplified Bundle structure. Use the Resources tab to explore
+                contents.
               </p>
             </TabsContent>
           </Tabs>

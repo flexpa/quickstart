@@ -1,14 +1,20 @@
 'use client';
 
-import { Copy, Check, ArrowRight, FileJson, LayoutDashboard, Timer } from 'lucide-react';
+import type { Bundle, Coverage } from 'fhir/r4';
+import {
+  ArrowRight,
+  Check,
+  Copy,
+  FileJson,
+  LayoutDashboard,
+  Timer,
+} from 'lucide-react';
+import { useState } from 'react';
+import { handleCopyJson } from '@/components/api-requests';
+import { CurlExample } from '@/components/curl-example';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
-import { Bundle, Coverage } from 'fhir/r4';
-import { handleCopyJson } from '@/components/api-requests';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { CurlExample } from '@/components/curl-example';
 import {
   Table,
   TableBody,
@@ -17,10 +23,13 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function CoverageRequest() {
   const [isLoading, setIsLoading] = useState(false);
-  const [coverageData, setCoverageData] = useState<Bundle<Coverage> | null>(null);
+  const [coverageData, setCoverageData] = useState<Bundle<Coverage> | null>(
+    null,
+  );
   const [hasCopied, setHasCopied] = useState(false);
   const [latencyMs, setLatencyMs] = useState<number | null>(null);
 
@@ -60,7 +69,9 @@ export default function CoverageRequest() {
       <div className="space-y-1">
         <div className="flex items-center gap-3">
           <Badge variant="outline">GET</Badge>
-          <code className="relative rounded bg-muted px-[0.5rem] py-[0.3rem] font-mono text-sm">Coverage</code>
+          <code className="relative rounded bg-muted px-[0.5rem] py-[0.3rem] font-mono text-sm">
+            Coverage
+          </code>
         </div>
         <div className="flex items-center gap-2 text-muted-foreground">
           <code className="text-xs font-mono">/fhir/Coverage</code>
@@ -69,14 +80,11 @@ export default function CoverageRequest() {
         </div>
       </div>
 
-      <CurlExample 
-        method="GET"
-        url="https://api.flexpa.com/fhir/Coverage"
-      />
+      <CurlExample method="GET" url="https://api.flexpa.com/fhir/Coverage" />
 
       {!coverageData && (
-        <Button 
-          onClick={handleCoverageRequest} 
+        <Button
+          onClick={handleCoverageRequest}
           disabled={isLoading}
           className="min-w-[120px]"
         >
@@ -84,7 +92,7 @@ export default function CoverageRequest() {
         </Button>
       )}
 
-      {coverageData && coverageData.entry && coverageData.entry.length > 0 && (
+      {coverageData?.entry && coverageData.entry.length > 0 && (
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <h3 className="font-semibold">Response Overview</h3>
@@ -106,7 +114,10 @@ export default function CoverageRequest() {
           <Tabs defaultValue="overview" className="w-full">
             <div className="flex items-center justify-between">
               <TabsList>
-                <TabsTrigger value="overview" className="flex items-center gap-2">
+                <TabsTrigger
+                  value="overview"
+                  className="flex items-center gap-2"
+                >
                   <LayoutDashboard className="h-4 w-4" />
                   Overview
                 </TabsTrigger>
@@ -116,11 +127,7 @@ export default function CoverageRequest() {
                 </TabsTrigger>
               </TabsList>
 
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={handleCopy}
-              >
+              <Button variant="outline" size="icon" onClick={handleCopy}>
                 {hasCopied ? (
                   <Check className="h-4 w-4" />
                 ) : (
@@ -146,7 +153,9 @@ export default function CoverageRequest() {
                       return (
                         <TableRow key={coverage.id}>
                           <TableCell>
-                            {coverage.class?.[0]?.name || coverage.type?.text || 'Unknown'}
+                            {coverage.class?.[0]?.name ||
+                              coverage.type?.text ||
+                              'Unknown'}
                           </TableCell>
                           <TableCell>
                             <Badge variant="outline">
@@ -154,8 +163,10 @@ export default function CoverageRequest() {
                             </Badge>
                           </TableCell>
                           <TableCell>
-                            {coverage.period?.start && formatDate(coverage.period.start)}
-                            {coverage.period?.end && ` - ${formatDate(coverage.period.end)}`}
+                            {coverage.period?.start &&
+                              formatDate(coverage.period.start)}
+                            {coverage.period?.end &&
+                              ` - ${formatDate(coverage.period.end)}`}
                           </TableCell>
                           <TableCell>
                             <Badge variant="secondary" className="capitalize">

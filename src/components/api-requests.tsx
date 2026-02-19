@@ -1,9 +1,9 @@
 'use client';
 
+import CoverageRequest from '@/components/api-requests/coverage';
+import EobRequest from '@/components/api-requests/eob';
 import EverythingRequest from '@/components/api-requests/everything';
 import PatientRequest from '@/components/api-requests/patient';
-import EobRequest from '@/components/api-requests/eob';
-import CoverageRequest from '@/components/api-requests/coverage';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export const handleCopyJson = (data: unknown) => {
