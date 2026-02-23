@@ -158,11 +158,26 @@ export default function PatientRequest() {
                   <TableRow>
                     <TableCell className="font-medium">Address</TableCell>
                     <TableCell>
-                      {patientData.address?.[0]?.line?.join(', ')}
-                      <br />
-                      {patientData.address?.[0]?.city},{' '}
-                      {patientData.address?.[0]?.state}{' '}
-                      {patientData.address?.[0]?.postalCode}
+                      {(() => {
+                        const addr = patientData.address?.[0];
+                        if (!addr) return null;
+                        const line = addr.line?.join(', ');
+                        const locality = [
+                          addr.city,
+                          [addr.state, addr.postalCode]
+                            .filter(Boolean)
+                            .join(' '),
+                        ]
+                          .filter(Boolean)
+                          .join(', ');
+                        return (
+                          <>
+                            {line}
+                            {line && locality && <br />}
+                            {locality}
+                          </>
+                        );
+                      })()}
                     </TableCell>
                   </TableRow>
                   <TableRow>

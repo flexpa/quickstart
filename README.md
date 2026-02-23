@@ -47,6 +47,24 @@ npm run dev
 
 The application will be available at [http://localhost:3000](http://localhost:3000).
 
+## Health Records Agent (Optional)
+
+The quickstart includes an AI-powered chat assistant at `/chat` that can answer questions about a patient's claims, demographics, and insurance coverage.
+
+To enable it, add an API key to your `.env` file for at least one provider:
+
+```bash
+# Anthropic (default)
+ANTHROPIC_API_KEY=your-key-here
+
+# or OpenAI
+OPENAI_API_KEY=your-key-here
+```
+
+The chat route at `src/app/api/chat/route.ts` uses Anthropic by default. You can swap the model by uncommenting the OpenAI import and changing the `model` parameter. The AI SDK supports [many other providers](https://sdk.vercel.ai/docs/foundations/providers-and-models) as well — including Google, Mistral, and more.
+
+This is a minimal implementation to demonstrate the concept — in production, you would likely add more tools, refine the system prompt, implement guardrails, and tailor the agent to your specific use case.
+
 ## Testing
 
 To test the quickstart app: 

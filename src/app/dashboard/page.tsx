@@ -1,6 +1,5 @@
-'use server';
-
 import { decodeJwt } from 'jose';
+import { Bot } from 'lucide-react';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -15,7 +14,12 @@ import { decrypt } from '@/lib/session';
 export default async function Dashboard() {
   const token = await decrypt((await cookies()).get('session')?.value);
   if (!token?.accessToken) redirect('/');
-  const decoded = decodeJwt(token.accessToken);
+  let decoded: ReturnType<typeof decodeJwt>;
+  try {
+    decoded = decodeJwt(token.accessToken);
+  } catch {
+    redirect('/');
+  }
   if (typeof decoded.sub !== 'string' || typeof decoded.patient !== 'string') {
     redirect('/');
   }
@@ -31,6 +35,13 @@ export default async function Dashboard() {
               <span className="font-bold inline-block">Flexpa Quickstart</span>
             </Link>
           </div>
+          <Link
+            href="/chat"
+            className="ml-auto flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+          >
+            <Bot className="h-4 w-4" />
+            Health Records Agent
+          </Link>
         </div>
       </header>
 
@@ -242,6 +253,84 @@ export default async function Dashboard() {
               </CardContent>
             </Card>
           )}
+
+          {/* Health Records Agent Card */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>Health Records Agent</CardTitle>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    An example AI agent built with the{' '}
+                    <Link
+                      href="https://sdk.vercel.ai/docs"
+                      className="underline"
+                    >
+                      Vercel AI SDK
+                    </Link>
+                    , powered by Anthropic&apos;s Claude Sonnet by default. The
+                    agent example uses three tools to answer questions about a
+                    patient&apos;s claims, coverage, and demographic data. The
+                    model provider is{' '}
+                    <Link
+                      href="https://sdk.vercel.ai/docs/foundations/providers-and-models"
+                      className="underline"
+                    >
+                      configurable
+                    </Link>{' '}
+                    — swap to OpenAI, Google, Mistral, or any supported
+                    provider. This is a minimal implementation to demonstrate
+                    the concept — in production, you would likely add more
+                    tools, refine the system prompt, implement guardrails, and
+                    tailor the agent to your specific use case.
+                  </p>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                <div className="rounded-lg border bg-muted/50 p-4">
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium">Agent Tools</p>
+                    <ul className="text-sm list-disc list-inside space-y-1">
+                      <li>
+                        <code className="text-xs">search_records</code> — Claims
+                        and Explanation of Benefits (EOB) data
+                      </li>
+                      <li>
+                        <code className="text-xs">search_patient</code> —
+                        Patient demographics (name, address, contact info)
+                      </li>
+                      <li>
+                        <code className="text-xs">search_coverage</code> —
+                        Insurance coverage and plan details
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                <p className="text-xs text-muted-foreground">
+                  We recommend using the agent with{' '}
+                  <Link
+                    href="https://www.flexpa.com/docs/getting-started/test-mode#test-mode-logins"
+                    className="underline"
+                  >
+                    test credentials
+                  </Link>
+                  . If you use your own data, be aware that PHI will be
+                  transmitted to the model provider.
+                </p>
+
+                <Link
+                  href="/chat"
+                  className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+                >
+                  <Bot className="h-4 w-4" />
+                  Open Health Records Agent
+                </Link>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </main>
     </div>

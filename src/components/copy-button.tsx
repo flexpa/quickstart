@@ -12,9 +12,13 @@ export function CopyButton({ value }: CopyButtonProps) {
   const [hasCopied, setHasCopied] = useState(false);
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(value);
-    setHasCopied(true);
-    setTimeout(() => setHasCopied(false), 2000);
+    try {
+      await navigator.clipboard.writeText(value);
+      setHasCopied(true);
+      setTimeout(() => setHasCopied(false), 2000);
+    } catch {
+      // Clipboard write can fail if permissions are denied
+    }
   };
 
   return (
