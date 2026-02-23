@@ -9,6 +9,9 @@
     "format": "biome check --write ."
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^3.0.46",
+    "@ai-sdk/openai": "^3.0.30",
+    "@ai-sdk/react": "^3.0.99",
     "@flexpa/node-sdk": "^1.0.0",
     "@medplum/core": "^3.3.0",
     "@radix-ui/react-accordion": "^1.2.12",
@@ -17,6 +20,7 @@
     "@radix-ui/react-separator": "^1.1.8",
     "@radix-ui/react-slot": "^1.2.4",
     "@radix-ui/react-tabs": "^1.1.13",
+    "ai": "^6.0.97",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "jose": "^5.10.0",
@@ -24,15 +28,17 @@
     "next": "^15.5.10",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "streamdown": "^2.3.0",
     "tailwind-merge": "^2.6.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.4.3",
     "@types/fhir": "^0.0.41",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "@biomejs/biome": "^2.4.3",
     "postcss": "^8",
     "tailwindcss": "^3.4.18",
     "typescript": "^5"
