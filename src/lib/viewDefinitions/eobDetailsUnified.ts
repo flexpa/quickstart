@@ -290,7 +290,8 @@ export const eobDetailsUnified = {
         // Item Location (Professional)
         {
           name: 'item_locationCodeableConcept_system',
-          path: "item.locationCodeableConcept.coding.system.distinct().join(',')",
+          path: 'item.locationCodeableConcept.coding.system.distinct()',
+          collection: true,
         },
         {
           name: 'item_locationCodeableConcept_code',
@@ -306,7 +307,8 @@ export const eobDetailsUnified = {
         // Item Details (Pharmacy - for compound medications)
         {
           name: 'item_detail_productOrService_system',
-          path: "item.detail.productOrService.coding.system.distinct().join(',')",
+          path: 'item.detail.productOrService.coding.system.distinct()',
+          collection: true,
         },
         {
           name: 'item_detail_productOrService_code',

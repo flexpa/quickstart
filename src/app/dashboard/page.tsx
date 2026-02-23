@@ -16,7 +16,12 @@ import { decrypt } from '@/lib/session';
 export default async function Dashboard() {
   const token = await decrypt((await cookies()).get('session')?.value);
   if (!token?.accessToken) redirect('/');
-  const decoded = decodeJwt(token.accessToken);
+  let decoded: ReturnType<typeof decodeJwt>;
+  try {
+    decoded = decodeJwt(token.accessToken);
+  } catch {
+    redirect('/');
+  }
   if (typeof decoded.sub !== 'string' || typeof decoded.patient !== 'string') {
     redirect('/');
   }
@@ -305,6 +310,18 @@ export default async function Dashboard() {
                     </ul>
                   </div>
                 </div>
+
+                <p className="text-xs text-muted-foreground">
+                  We recommend using the agent with{' '}
+                  <Link
+                    href="https://www.flexpa.com/docs/getting-started/test-mode#test-mode-logins"
+                    className="underline"
+                  >
+                    test credentials
+                  </Link>
+                  . If you use your own data, be aware that PHI will be
+                  transmitted to the model provider.
+                </p>
 
                 <Link
                   href="/chat"

@@ -22,26 +22,28 @@ export async function POST(_request: Request) {
   const batch: Bundle = {
     resourceType: 'Bundle',
     type: 'transaction',
-    entry: everything.entry?.map((entry) => ({
-      resource: {
-        ...(entry.resource as FhirResource),
-        meta: {
-          ...entry.resource?.meta,
-          tag: [
-            ...(entry.resource?.meta?.tag || []),
-            {
-              system: 'https://fhir.flexpa.com/identifiers/ResourceId',
-              code: entry.resource?.id,
-            },
-          ],
+    entry: everything.entry
+      ?.filter((entry) => entry.resource)
+      .map((entry) => ({
+        resource: {
+          ...(entry.resource as FhirResource),
+          meta: {
+            ...entry.resource?.meta,
+            tag: [
+              ...(entry.resource?.meta?.tag || []),
+              {
+                system: 'https://fhir.flexpa.com/identifiers/ResourceId',
+                code: entry.resource?.id,
+              },
+            ],
+          },
         },
-      },
-      request: {
-        method: 'POST',
-        url: `${entry.resource?.resourceType}`,
-        ifNoneExist: `_tag=https://fhir.flexpa.com/identifiers/ResourceId|${entry.resource?.id}`,
-      },
-    })),
+        request: {
+          method: 'POST',
+          url: `${entry.resource?.resourceType}`,
+          ifNoneExist: `_tag=https://fhir.flexpa.com/identifiers/ResourceId|${entry.resource?.id}`,
+        },
+      })),
   };
 
   const outcome = await medplum.executeBatch(batch);
