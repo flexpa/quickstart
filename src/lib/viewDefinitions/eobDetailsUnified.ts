@@ -531,30 +531,32 @@ export const eobDetailsUnified = {
         // ============================================
         {
           name: 'admissionperiod_start',
-          path: "supportingInfo.where(category.coding.where(system='http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType').code='admissionperiod').timingPeriod.start.join(',')",
+          path: "supportingInfo.where(category.coding.where(system='http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType').code='admissionperiod').timingPeriod.start",
+          collection: true,
         },
         {
           name: 'admissionperiod_end',
-          path: "supportingInfo.where(category.coding.where(system='http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType').code='admissionperiod').timingPeriod.end.join(',')",
+          path: "supportingInfo.where(category.coding.where(system='http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType').code='admissionperiod').timingPeriod.end",
+          collection: true,
         },
         {
           name: 'typeofbill_system',
-          path: "supportingInfo.where(category.coding.where(system='http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType').code='typeofbill').code.coding.system",
+          path: "supportingInfo.where(category.coding.where(system='http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType').code='typeofbill').code.coding.system.distinct()",
           collection: true,
         },
         {
           name: 'typeofbill_code',
-          path: "supportingInfo.where(category.coding.where(system='http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType').code='typeofbill').code.coding.code",
+          path: "supportingInfo.where(category.coding.where(system='http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType').code='typeofbill').code.coding.code.distinct()",
           collection: true,
         },
         {
           name: 'typeofbill_display',
-          path: "supportingInfo.where(category.coding.where(system='http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType').code='typeofbill').code.coding.display",
+          path: "supportingInfo.where(category.coding.where(system='http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType').code='typeofbill').code.coding.display.distinct()",
           collection: true,
         },
         {
           name: 'pointoforigin_system',
-          path: "supportingInfo.where(category.coding.where(system='http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType').code='pointoforigin').code.coding.system",
+          path: "supportingInfo.where(category.coding.where(system='http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType').code='pointoforigin').code.coding.system.distinct()",
           collection: true,
         },
         {
@@ -599,15 +601,18 @@ export const eobDetailsUnified = {
         },
         {
           name: 'drg_system',
-          path: "supportingInfo.where(category.coding.where(system='http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType').code='drg').code.coding.system.join(',')",
+          path: "supportingInfo.where(category.coding.where(system='http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType').code='drg').code.coding.system.distinct()",
+          collection: true,
         },
         {
           name: 'drg_code',
-          path: "supportingInfo.where(category.coding.where(system='http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType').code='drg').code.coding.code.join(',')",
+          path: "supportingInfo.where(category.coding.where(system='http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType').code='drg').code.coding.code.distinct()",
+          collection: true,
         },
         {
           name: 'drg_display',
-          path: "supportingInfo.where(category.coding.where(system='http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType').code='drg').code.coding.display.join(',')",
+          path: "supportingInfo.where(category.coding.where(system='http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType').code='drg').code.coding.display.distinct()",
+          collection: true,
         },
 
         // ============================================
