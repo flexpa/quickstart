@@ -1,5 +1,3 @@
-'use server';
-
 import { decodeJwt } from 'jose';
 import { Bot } from 'lucide-react';
 import { cookies } from 'next/headers';

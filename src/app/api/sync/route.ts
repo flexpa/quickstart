@@ -23,7 +23,7 @@ export async function POST(_request: Request) {
     resourceType: 'Bundle',
     type: 'transaction',
     entry: everything.entry
-      ?.filter((entry) => entry.resource)
+      ?.filter((entry) => entry.resource?.id)
       .map((entry) => ({
         resource: {
           ...(entry.resource as FhirResource),

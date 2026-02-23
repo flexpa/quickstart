@@ -169,6 +169,16 @@ export const eobDetailsUnified = {
           collection: true,
         },
         {
+          name: 'item_servicedPeriod_start',
+          path: 'item.servicedPeriod.start',
+          collection: true,
+        },
+        {
+          name: 'item_servicedPeriod_end',
+          path: 'item.servicedPeriod.end',
+          collection: true,
+        },
+        {
           name: 'item_productOrService_system',
           path: 'item.productOrService.coding.system.distinct()',
           collection: true,
@@ -324,19 +334,23 @@ export const eobDetailsUnified = {
         // Care Team
         {
           name: 'careTeam_role_system',
-          path: "careTeam.role.coding.system.distinct().join(',')",
+          path: 'careTeam.role.coding.system.distinct()',
+          collection: true,
         },
         {
           name: 'careTeam_role_code',
-          path: "careTeam.role.coding.code.distinct().join(',')",
+          path: 'careTeam.role.coding.code.distinct()',
+          collection: true,
         },
         {
           name: 'careTeam_role_display',
-          path: "careTeam.role.coding.display.distinct().join(',')",
+          path: 'careTeam.role.coding.display.distinct()',
+          collection: true,
         },
         {
           name: 'careTeam_provider_reference',
-          path: "careTeam.provider.reference.join(',')",
+          path: 'careTeam.provider.reference.distinct()',
+          collection: true,
         },
         {
           name: 'careTeam_qualification_system',
@@ -356,6 +370,11 @@ export const eobDetailsUnified = {
 
         // Diagnoses
         {
+          name: 'diagnosis_sequence',
+          path: 'diagnosis.sequence',
+          collection: true,
+        },
+        {
           name: 'diagnosis_type_system',
           path: 'diagnosis.type.coding.system.distinct()',
           collection: true,
@@ -372,45 +391,60 @@ export const eobDetailsUnified = {
         },
         {
           name: 'diagnosisCodeableConcept_system',
-          path: "diagnosis.diagnosisCodeableConcept.coding.system.distinct().join(',')",
+          path: 'diagnosis.diagnosisCodeableConcept.coding.system.distinct()',
+          collection: true,
         },
         {
           name: 'diagnosisCodeableConcept_code',
-          path: "diagnosis.diagnosisCodeableConcept.coding.code.distinct().join(',')",
+          path: 'diagnosis.diagnosisCodeableConcept.coding.code.distinct()',
+          collection: true,
         },
         {
           name: 'diagnosisCodeableConcept_display',
-          path: "diagnosis.diagnosisCodeableConcept.coding.display.distinct().join(',')",
+          path: 'diagnosis.diagnosisCodeableConcept.coding.display.distinct()',
+          collection: true,
         },
         {
           name: 'onAdmission_system',
-          path: "diagnosis.onAdmission.coding.system.distinct().join(',')",
+          path: 'diagnosis.onAdmission.coding.system.distinct()',
+          collection: true,
         },
         {
           name: 'onAdmission_code',
-          path: "diagnosis.onAdmission.coding.code.distinct().join(',')",
+          path: 'diagnosis.onAdmission.coding.code.distinct()',
+          collection: true,
         },
         {
           name: 'onAdmission_display',
-          path: "diagnosis.onAdmission.coding.display.distinct().join(',')",
+          path: 'diagnosis.onAdmission.coding.display.distinct()',
+          collection: true,
         },
 
         // Procedures
         {
+          name: 'procedure_sequence',
+          path: 'procedure.sequence',
+          collection: true,
+        },
+        {
           name: 'procedure_type_system',
-          path: "procedure.type.coding.system.distinct().join(',')",
+          path: 'procedure.type.coding.system.distinct()',
+          collection: true,
         },
         {
           name: 'procedure_type_code',
-          path: "procedure.type.coding.code.distinct().join(',')",
+          path: 'procedure.type.coding.code.distinct()',
+          collection: true,
         },
         {
           name: 'procedure_type_display',
-          path: "procedure.type.coding.display.distinct().join(',')",
+          path: 'procedure.type.coding.display.distinct()',
+          collection: true,
         },
         {
           name: 'procedure_date',
-          path: "procedure.date.join(',')",
+          path: 'procedure.date',
+          collection: true,
         },
         {
           name: 'procedure_procedureCodeableConcept_system',
@@ -420,6 +454,11 @@ export const eobDetailsUnified = {
         {
           name: 'procedure_procedureCodeableConcept_code',
           path: 'procedure.procedureCodeableConcept.coding.code.distinct()',
+          collection: true,
+        },
+        {
+          name: 'procedure_procedureCodeableConcept_display',
+          path: 'procedure.procedureCodeableConcept.coding.display.distinct()',
           collection: true,
         },
 
@@ -500,7 +539,8 @@ export const eobDetailsUnified = {
         },
         {
           name: 'typeofbill_system',
-          path: "supportingInfo.where(category.coding.where(system='http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType').code='typeofbill').code.coding.system.join(',')",
+          path: "supportingInfo.where(category.coding.where(system='http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType').code='typeofbill').code.coding.system",
+          collection: true,
         },
         {
           name: 'typeofbill_code',
@@ -514,7 +554,8 @@ export const eobDetailsUnified = {
         },
         {
           name: 'pointoforigin_system',
-          path: "supportingInfo.where(category.coding.where(system='http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType').code='pointoforigin').code.coding.system.join(',')",
+          path: "supportingInfo.where(category.coding.where(system='http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType').code='pointoforigin').code.coding.system",
+          collection: true,
         },
         {
           name: 'pointoforigin_code',
@@ -543,15 +584,18 @@ export const eobDetailsUnified = {
         },
         {
           name: 'discharge_status_system',
-          path: "supportingInfo.where(category.coding.where(system='http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType').code='discharge-status').code.coding.system.join(',')",
+          path: "supportingInfo.where(category.coding.where(system='http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType').code='discharge-status').code.coding.system.distinct()",
+          collection: true,
         },
         {
           name: 'discharge_status_code',
-          path: "supportingInfo.where(category.coding.where(system='http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType').code='discharge-status').code.coding.code.join(',')",
+          path: "supportingInfo.where(category.coding.where(system='http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType').code='discharge-status').code.coding.code.distinct()",
+          collection: true,
         },
         {
           name: 'discharge_status_display',
-          path: "supportingInfo.where(category.coding.where(system='http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType').code='discharge-status').code.coding.display.join(',')",
+          path: "supportingInfo.where(category.coding.where(system='http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType').code='discharge-status').code.coding.display.distinct()",
+          collection: true,
         },
         {
           name: 'drg_system',
@@ -560,6 +604,10 @@ export const eobDetailsUnified = {
         {
           name: 'drg_code',
           path: "supportingInfo.where(category.coding.where(system='http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType').code='drg').code.coding.code.join(',')",
+        },
+        {
+          name: 'drg_display',
+          path: "supportingInfo.where(category.coding.where(system='http://hl7.org/fhir/us/carin-bb/CodeSystem/C4BBSupportingInfoType').code='drg').code.coding.display.join(',')",
         },
 
         // ============================================
@@ -599,15 +647,18 @@ export const eobDetailsUnified = {
         // ============================================
         {
           name: 'payment_type_system',
-          path: "payment.type.coding.system.distinct().join(',')",
+          path: 'payment.type.coding.system',
+          collection: true,
         },
         {
           name: 'payment_type_code',
-          path: "payment.type.coding.code.distinct().join(',')",
+          path: 'payment.type.coding.code',
+          collection: true,
         },
         {
           name: 'payment_type_display',
-          path: "payment.type.coding.display.distinct().join(',')",
+          path: 'payment.type.coding.display',
+          collection: true,
         },
         {
           name: 'payment_date',
