@@ -1,20 +1,22 @@
 'use client';
 
-import { Copy, Check, ArrowRight, FileJson, LayoutDashboard, Timer } from 'lucide-react';
+import type { Patient } from 'fhir/r4';
+import {
+  ArrowRight,
+  Check,
+  Copy,
+  FileJson,
+  LayoutDashboard,
+  Timer,
+} from 'lucide-react';
+import { useState } from 'react';
+import { handleCopyJson } from '@/components/api-requests';
+import { CurlExample } from '@/components/curl-example';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
-import { Patient } from 'fhir/r4';
-import { handleCopyJson } from '@/components/api-requests';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { CurlExample } from '@/components/curl-example';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-} from '@/components/ui/table';
 
 export default function PatientRequest() {
   const [isLoading, setIsLoading] = useState(false);
@@ -58,7 +60,9 @@ export default function PatientRequest() {
       <div className="space-y-1">
         <div className="flex items-center gap-3">
           <Badge variant="outline">GET</Badge>
-          <code className="relative rounded bg-muted px-[0.5rem] py-[0.3rem] font-mono text-sm">Patient</code>
+          <code className="relative rounded bg-muted px-[0.5rem] py-[0.3rem] font-mono text-sm">
+            Patient
+          </code>
         </div>
         <div className="flex items-center gap-2 text-muted-foreground">
           <code className="text-xs font-mono">/fhir/Patient/$PATIENT_ID</code>
@@ -67,14 +71,14 @@ export default function PatientRequest() {
         </div>
       </div>
 
-      <CurlExample 
+      <CurlExample
         method="GET"
         url="https://api.flexpa.com/fhir/Patient/$PATIENT_ID"
       />
 
       {!patientData && (
-        <Button 
-          onClick={handlePatientRequest} 
+        <Button
+          onClick={handlePatientRequest}
           disabled={isLoading}
           className="min-w-[120px]"
         >
@@ -104,7 +108,10 @@ export default function PatientRequest() {
           <Tabs defaultValue="overview" className="w-full">
             <div className="flex items-center justify-between">
               <TabsList>
-                <TabsTrigger value="overview" className="flex items-center gap-2">
+                <TabsTrigger
+                  value="overview"
+                  className="flex items-center gap-2"
+                >
                   <LayoutDashboard className="h-4 w-4" />
                   Overview
                 </TabsTrigger>
@@ -114,11 +121,7 @@ export default function PatientRequest() {
                 </TabsTrigger>
               </TabsList>
 
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={handleCopy}
-              >
+              <Button variant="outline" size="icon" onClick={handleCopy}>
                 {hasCopied ? (
                   <Check className="h-4 w-4" />
                 ) : (
@@ -131,33 +134,42 @@ export default function PatientRequest() {
               <Table>
                 <TableBody>
                   <TableRow>
-                    <TableCell className="w-[200px] font-medium">Name</TableCell>
+                    <TableCell className="w-[200px] font-medium">
+                      Name
+                    </TableCell>
                     <TableCell>
-                      {patientData.name?.[0]?.given?.join(' ')} {patientData.name?.[0]?.family}
+                      {patientData.name?.[0]?.given?.join(' ')}{' '}
+                      {patientData.name?.[0]?.family}
                     </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell className="font-medium">Birth Date</TableCell>
                     <TableCell>
-                      {patientData.birthDate && formatDate(patientData.birthDate)}
+                      {patientData.birthDate &&
+                        formatDate(patientData.birthDate)}
                     </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell className="font-medium">Gender</TableCell>
-                    <TableCell className="capitalize">{patientData.gender}</TableCell>
+                    <TableCell className="capitalize">
+                      {patientData.gender}
+                    </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell className="font-medium">Address</TableCell>
                     <TableCell>
-                      {patientData.address?.[0]?.line?.join(', ')}<br />
-                      {patientData.address?.[0]?.city}, {patientData.address?.[0]?.state} {patientData.address?.[0]?.postalCode}
+                      {patientData.address?.[0]?.line?.join(', ')}
+                      <br />
+                      {patientData.address?.[0]?.city},{' '}
+                      {patientData.address?.[0]?.state}{' '}
+                      {patientData.address?.[0]?.postalCode}
                     </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell className="font-medium">Contact</TableCell>
                     <TableCell>
                       {patientData.telecom?.map((telecom, i) => (
-                        <div key={i}>
+                        <div key={`${telecom.system}-${telecom.value}-${i}`}>
                           {telecom.system}: {telecom.value}
                         </div>
                       ))}

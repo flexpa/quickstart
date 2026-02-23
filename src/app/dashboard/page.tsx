@@ -1,20 +1,26 @@
-'use server'
+'use server';
 
-import { cookies } from 'next/headers'
-import { decrypt } from '@/lib/session';
 import { decodeJwt } from 'jose';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ApiRequests } from '@/components/api-requests'
-import { AccessTokenDisplay } from '@/components/access-token-display'
-import { Badge } from '@/components/ui/badge'
-import Link from 'next/link'
-import { CopyButton } from '@/components/copy-button'
+import { cookies } from 'next/headers';
+import Link from 'next/link';
+import { redirect } from 'next/navigation';
+import { AccessTokenDisplay } from '@/components/access-token-display';
+import { ApiRequests } from '@/components/api-requests';
+import { CopyButton } from '@/components/copy-button';
 import MedplumSync from '@/components/medplum-sync';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { decrypt } from '@/lib/session';
 
 export default async function Dashboard() {
   const token = await decrypt((await cookies()).get('session')?.value);
-  const decoded = decodeJwt(token?.accessToken as string);
-  const isMedplumConfigured = process.env.MEDPLUM_CLIENT_ID && process.env.MEDPLUM_CLIENT_SECRET;
+  if (!token?.accessToken) redirect('/');
+  const decoded = decodeJwt(token.accessToken);
+  if (typeof decoded.sub !== 'string' || typeof decoded.patient !== 'string') {
+    redirect('/');
+  }
+  const isMedplumConfigured =
+    process.env.MEDPLUM_CLIENT_ID && process.env.MEDPLUM_CLIENT_SECRET;
 
   return (
     <div className="min-h-screen bg-gray-50/50">
@@ -37,7 +43,15 @@ export default async function Dashboard() {
                 <div>
                   <CardTitle>Patient Authorization</CardTitle>
                   <p className="text-sm text-muted-foreground mt-1">
-                    A Flexpa access token is obtained after a successful <Link href="https://www.flexpa.com/docs/consent" className="underline">Flexpa Link</Link> consent flow. This token contains patient information and authorization details needed to access the Flexpa FHIR API.
+                    A Flexpa access token is obtained after a successful{' '}
+                    <Link
+                      href="https://www.flexpa.com/docs/consent"
+                      className="underline"
+                    >
+                      Flexpa Link
+                    </Link>{' '}
+                    consent flow. This token contains patient information and
+                    authorization details needed to access the Flexpa FHIR API.
                   </p>
                 </div>
                 <Badge variant="outline">Active</Badge>
@@ -48,36 +62,52 @@ export default async function Dashboard() {
                 <div className="rounded-lg border bg-muted/50 p-4">
                   <div className="space-y-4">
                     <p className="text-sm">
-                      After a user connects their health plan with Flexpa Link, you&apos;ll receive a <code className="text-xs">public_token</code> that can be <Link href="https://www.flexpa.com/docs/consent#exchange-public-token" className="underline">exchanged</Link> for an <code className="text-xs">access_token</code>. 
-                      This token provides secure access to the patient&apos;s FHIR resources through Flexpa&apos;s API.
+                      After a user connects their health plan with Flexpa Link,
+                      you&apos;ll receive a{' '}
+                      <code className="text-xs">public_token</code> that can be{' '}
+                      <Link
+                        href="https://www.flexpa.com/docs/consent#exchange-public-token"
+                        className="underline"
+                      >
+                        exchanged
+                      </Link>{' '}
+                      for an <code className="text-xs">access_token</code>. This
+                      token provides secure access to the patient&apos;s FHIR
+                      resources through Flexpa&apos;s API.
                     </p>
                   </div>
                 </div>
 
                 <div className="grid gap-4">
                   <div className="grid grid-cols-[160px_1fr] gap-4 items-center">
-                    <div className="text-sm font-medium text-muted-foreground">Authorization ID</div>
+                    <div className="text-sm font-medium text-muted-foreground">
+                      Authorization ID
+                    </div>
                     <div className="flex items-center gap-2">
                       <code className="flex-1 relative rounded bg-muted px-3 py-2 font-mono text-sm">
-                        {decoded.sub as string}
+                        {decoded.sub}
                       </code>
-                      <CopyButton value={decoded.sub as string} />
+                      <CopyButton value={decoded.sub} />
                     </div>
 
-                    <div className="text-sm font-medium text-muted-foreground">Patient ID</div>
+                    <div className="text-sm font-medium text-muted-foreground">
+                      Patient ID
+                    </div>
                     <div className="flex items-center gap-2">
                       <code className="flex-1 relative rounded bg-muted px-3 py-2 font-mono text-sm">
-                        {decoded.patient as string}
+                        {decoded.patient}
                       </code>
-                      <CopyButton value={decoded.patient as string} />
+                      <CopyButton value={decoded.patient} />
                     </div>
 
-                    <div className="text-sm font-medium text-muted-foreground">Access Token</div>
+                    <div className="text-sm font-medium text-muted-foreground">
+                      Access Token
+                    </div>
                     <div className="flex items-center gap-2">
                       <div className="flex-1 relative rounded bg-muted px-3 py-2">
-                        <AccessTokenDisplay token={token?.accessToken as string} />
+                        <AccessTokenDisplay token={token.accessToken} />
                       </div>
-                      <CopyButton value={token?.accessToken as string} />
+                      <CopyButton value={token.accessToken} />
                     </div>
                   </div>
                 </div>
@@ -92,7 +122,18 @@ export default async function Dashboard() {
                 <div>
                   <CardTitle>FHIR API Explorer</CardTitle>
                   <p className="text-sm text-muted-foreground mt-1">
-                    <Link href="https://www.flexpa.com/docs/records" className="underline">Flexpa&apos;s API</Link> uses FHIR (Fast Healthcare Interoperability Resources), a standard for exchanging healthcare information electronically. The API synchronizes and normalizes data from health plans, providing reliable access to patient claims, demographics, and clinical data in the FHIR R4 format.
+                    <Link
+                      href="https://www.flexpa.com/docs/records"
+                      className="underline"
+                    >
+                      Flexpa&apos;s API
+                    </Link>{' '}
+                    uses FHIR (Fast Healthcare Interoperability Resources), a
+                    standard for exchanging healthcare information
+                    electronically. The API synchronizes and normalizes data
+                    from health plans, providing reliable access to patient
+                    claims, demographics, and clinical data in the FHIR R4
+                    format.
                   </p>
                 </div>
               </div>
@@ -100,7 +141,9 @@ export default async function Dashboard() {
             <CardContent>
               <div className="space-y-6">
                 <div className="grid grid-cols-[160px_1fr] gap-4 items-center">
-                  <div className="text-sm font-medium text-muted-foreground">Base URL</div>
+                  <div className="text-sm font-medium text-muted-foreground">
+                    Base URL
+                  </div>
                   <div className="flex items-center gap-2">
                     <code className="flex-1 relative rounded bg-muted px-3 py-2 font-mono text-sm">
                       https://api.flexpa.com/fhir
@@ -116,13 +159,28 @@ export default async function Dashboard() {
                         The endpoints below demonstrate core FHIR capabilities:
                       </p>
                       <ul className="text-sm list-disc list-inside space-y-1">
-                        <li><code className="text-xs">$everything</code> - Comprehensive patient record with all available resources</li>
-                        <li><code className="text-xs">Patient</code> - Basic demographic information</li>
-                        <li><code className="text-xs">ExplanationOfBenefit</code> - Claims and payment information</li>
-                        <li><code className="text-xs">Coverage</code> - Insurance coverage details</li>
+                        <li>
+                          <code className="text-xs">$everything</code> -
+                          Comprehensive patient record with all available
+                          resources
+                        </li>
+                        <li>
+                          <code className="text-xs">Patient</code> - Basic
+                          demographic information
+                        </li>
+                        <li>
+                          <code className="text-xs">ExplanationOfBenefit</code>{' '}
+                          - Claims and payment information
+                        </li>
+                        <li>
+                          <code className="text-xs">Coverage</code> - Insurance
+                          coverage details
+                        </li>
                       </ul>
                       <p className="text-sm mt-4">
-                        Each response includes Flexpa-specific metadata and transformations to ensure consistency and reliability across different payer endpoints.
+                        Each response includes Flexpa-specific metadata and
+                        transformations to ensure consistency and reliability
+                        across different payer endpoints.
                       </p>
                     </div>
                   </div>
@@ -141,7 +199,19 @@ export default async function Dashboard() {
                   <div>
                     <CardTitle>Medplum Integration</CardTitle>
                     <p className="text-sm text-muted-foreground mt-1">
-                      Store your Flexpa health records in a secure, HIPAA-compliant FHIR server using <Link href="https://flexpa.com/docs/guides/medplum" className="underline">Medplum</Link>. While Flexpa helps you retrieve claims, coverage, and clinical records from health plans, Medplum provides a fully-managed FHIR server with built-in data modeling, search capabilities, and healthcare-specific features that make it ideal for storing and working with claims data.
+                      Store your Flexpa health records in a secure,
+                      HIPAA-compliant FHIR server using{' '}
+                      <Link
+                        href="https://flexpa.com/docs/guides/medplum"
+                        className="underline"
+                      >
+                        Medplum
+                      </Link>
+                      . While Flexpa helps you retrieve claims, coverage, and
+                      clinical records from health plans, Medplum provides a
+                      fully-managed FHIR server with built-in data modeling,
+                      search capabilities, and healthcare-specific features that
+                      make it ideal for storing and working with claims data.
                     </p>
                   </div>
                 </div>
@@ -151,7 +221,18 @@ export default async function Dashboard() {
                   <div className="rounded-lg border bg-muted/50 p-4">
                     <div className="space-y-4">
                       <p className="text-sm">
-                        This integration allows you to maintain and manage patient data in a fully compliant environment. See the guide <Link href="https://flexpa.com/docs/guides/medplum" className="underline">here</Link> to learn how to sync your Flexpa health records to Medplum. Once synced, click on a resource ID to view the data in Medplum.
+                        This integration allows you to maintain and manage
+                        patient data in a fully compliant environment. See the
+                        guide{' '}
+                        <Link
+                          href="https://flexpa.com/docs/guides/medplum"
+                          className="underline"
+                        >
+                          here
+                        </Link>{' '}
+                        to learn how to sync your Flexpa health records to
+                        Medplum. Once synced, click on a resource ID to view the
+                        data in Medplum.
                       </p>
                     </div>
                   </div>
@@ -164,5 +245,5 @@ export default async function Dashboard() {
         </div>
       </main>
     </div>
-  )
+  );
 }

@@ -1,12 +1,26 @@
 'use client';
 
-import { Copy, Check, ArrowRight, FileJson, LayoutDashboard, Timer } from 'lucide-react';
+import type { Bundle } from 'fhir/r4';
+import {
+  ArrowRight,
+  Check,
+  Copy,
+  FileJson,
+  LayoutDashboard,
+  Timer,
+} from 'lucide-react';
+import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
-import { Bundle } from 'fhir/r4';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function MedplumSync() {
@@ -45,21 +59,21 @@ export default function MedplumSync() {
         <div className="space-y-1">
           <div className="flex items-center gap-3">
             <Badge variant="outline">POST</Badge>
-            <code className="relative rounded bg-muted px-[0.5rem] py-[0.3rem] font-mono text-sm">$import</code>
+            <code className="relative rounded bg-muted px-[0.5rem] py-[0.3rem] font-mono text-sm">
+              $import
+            </code>
           </div>
           <div className="flex items-center gap-2 text-muted-foreground">
-            <code className="text-xs font-mono">https://api.medplum.com/fhir/R4</code>
+            <code className="text-xs font-mono">
+              https://api.medplum.com/fhir/R4
+            </code>
             <ArrowRight className="h-3 w-3" />
             <span className="text-xs">FHIR transaction bundle</span>
           </div>
         </div>
         {syncData ? (
           <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={handleCopy}
-            >
+            <Button variant="outline" size="icon" onClick={handleCopy}>
               {hasCopied ? (
                 <Check className="h-4 w-4" />
               ) : (
@@ -68,8 +82,8 @@ export default function MedplumSync() {
             </Button>
           </div>
         ) : (
-          <Button 
-            onClick={handleSync} 
+          <Button
+            onClick={handleSync}
             disabled={isLoading}
             className="min-w-[120px]"
           >
@@ -123,12 +137,14 @@ export default function MedplumSync() {
                 </TableHeader>
                 <TableBody>
                   {syncData.entry?.map((entry, index) => (
-                    <TableRow key={index}>
+                    <TableRow
+                      key={`${entry.resource?.resourceType}-${entry.resource?.id}-${index}`}
+                    >
                       <TableCell className="font-medium">
                         {entry.resource?.resourceType}
                       </TableCell>
                       <TableCell className="font-mono text-sm">
-                        <a 
+                        <a
                           href={`https://app.medplum.com/${entry.resource?.resourceType}/${entry.resource?.id}`}
                           target="_blank"
                           rel="noopener noreferrer"
@@ -138,11 +154,14 @@ export default function MedplumSync() {
                         </a>
                       </TableCell>
                       <TableCell>
-                        <Badge variant="outline" className={
-                          entry.response?.status?.startsWith('2')
-                            ? 'bg-green-100 text-green-800'
-                            : 'bg-red-100 text-red-800'
-                        }>
+                        <Badge
+                          variant="outline"
+                          className={
+                            entry.response?.status?.startsWith('2')
+                              ? 'bg-green-100 text-green-800'
+                              : 'bg-red-100 text-red-800'
+                          }
+                        >
                           {entry.response?.status}
                         </Badge>
                       </TableCell>
