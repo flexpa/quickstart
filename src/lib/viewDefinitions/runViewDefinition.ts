@@ -19,8 +19,7 @@ export async function runViewDefinition(
   if (!response.ok) {
     const errorText = await response.text();
     console.error(
-      `ViewDefinition/$run failed (${response.status}):`,
-      errorText,
+      `ViewDefinition/$run failed: ${response.status} ${response.statusText}`,
     );
     return {
       error: `API returned ${response.status}`,

@@ -10,7 +10,20 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const { viewDefinitionKey } = await req.json();
+  let viewDefinitionKey: unknown;
+  try {
+    const body = await req.json();
+    viewDefinitionKey = body.viewDefinitionKey;
+  } catch {
+    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
+  }
+
+  if (typeof viewDefinitionKey !== 'string') {
+    return NextResponse.json(
+      { error: 'Missing or invalid viewDefinitionKey' },
+      { status: 400 },
+    );
+  }
 
   const entry = getViewDefinitionByKey(viewDefinitionKey);
   if (!entry) {
