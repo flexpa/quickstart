@@ -22,7 +22,11 @@ export async function runViewDefinition(
       `ViewDefinition/$run failed (${response.status}):`,
       errorText,
     );
-    return { error: `API returned ${response.status}`, details: errorText };
+    return {
+      error: `API returned ${response.status}`,
+      status: response.status,
+      details: errorText,
+    };
   }
   return response.json();
 }

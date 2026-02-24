@@ -25,6 +25,9 @@ export async function POST(req: Request) {
       session.accessToken,
       entry.definition,
     );
+    if (result.error) {
+      return NextResponse.json(result, { status: result.status ?? 502 });
+    }
     return NextResponse.json(result);
   } catch (error) {
     console.error('ViewDefinition/$run error:', error);

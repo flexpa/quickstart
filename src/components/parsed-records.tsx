@@ -67,6 +67,7 @@ export function ParsedRecords() {
   const [isLoading, setIsLoading] = useState(false);
   const [responseData, setResponseData] = useState<ResponseData | null>(null);
   const [latencyMs, setLatencyMs] = useState<number | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [hasCopied, setHasCopied] = useState(false);
 
   const selectedEntry =
@@ -77,23 +78,37 @@ export function ParsedRecords() {
     setSelectedKey(key);
     setResponseData(null);
     setLatencyMs(null);
+    setError(null);
   };
 
   const handleSendRequest = async () => {
     try {
       setIsLoading(true);
+      setError(null);
       const startTime = performance.now();
       const response = await fetch('/api/view-definition', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ viewDefinitionKey: selectedKey }),
       });
-      const data = await response.json();
       const endTime = performance.now();
+      if (!response.ok) {
+        const body = await response.json().catch(() => null);
+        setError(
+          body?.error ?? `Request failed with status ${response.status}`,
+        );
+        setResponseData(null);
+        setLatencyMs(null);
+        return;
+      }
+      const data = await response.json();
       setLatencyMs(Math.round(endTime - startTime));
       setResponseData(data);
-    } catch (error) {
-      console.error('Error running ViewDefinition:', error);
+    } catch (err) {
+      console.error('Error running ViewDefinition:', err);
+      setError('Failed to send request');
+      setResponseData(null);
+      setLatencyMs(null);
     } finally {
       setIsLoading(false);
     }
@@ -179,6 +194,13 @@ export function ParsedRecords() {
           </AccordionContent>
         </AccordionItem>
       </Accordion>
+
+      {/* Error display */}
+      {error && (
+        <div className="rounded-md border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
+          {error}
+        </div>
+      )}
 
       {/* Send Request button */}
       {!responseData && (
