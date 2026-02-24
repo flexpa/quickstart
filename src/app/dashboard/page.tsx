@@ -3,12 +3,12 @@ import { Bot } from 'lucide-react';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { AccessTokenDisplay } from '@/components/access-token-display';
 import { ApiRequests } from '@/components/api-requests';
+import { ConsentCard } from '@/components/consent-card';
 import { CopyButton } from '@/components/copy-button';
 import MedplumSync from '@/components/medplum-sync';
-import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { fetchConsent } from '@/lib/consent';
 import { decrypt } from '@/lib/session';
 
 export default async function Dashboard() {
@@ -23,6 +23,7 @@ export default async function Dashboard() {
   if (typeof decoded.sub !== 'string' || typeof decoded.patient !== 'string') {
     redirect('/');
   }
+  const consentData = await fetchConsent(token.accessToken);
   const isMedplumConfigured =
     process.env.MEDPLUM_CLIENT_ID && process.env.MEDPLUM_CLIENT_SECRET;
 
@@ -47,84 +48,12 @@ export default async function Dashboard() {
 
       <main className="container max-w-screen-lg mx-auto py-6">
         <div className="grid gap-6">
-          {/* Authorization Card */}
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle>Patient Authorization</CardTitle>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    A Flexpa access token is obtained after a successful{' '}
-                    <Link
-                      href="https://www.flexpa.com/docs/consent"
-                      className="underline"
-                    >
-                      Flexpa Link
-                    </Link>{' '}
-                    consent flow. This token contains patient information and
-                    authorization details needed to access the Flexpa FHIR API.
-                  </p>
-                </div>
-                <Badge variant="outline">Active</Badge>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-6">
-                <div className="rounded-lg border bg-muted/50 p-4">
-                  <div className="space-y-4">
-                    <p className="text-sm">
-                      After a user connects their health plan with Flexpa Link,
-                      you&apos;ll receive a{' '}
-                      <code className="text-xs">public_token</code> that can be{' '}
-                      <Link
-                        href="https://www.flexpa.com/docs/consent#exchange-public-token"
-                        className="underline"
-                      >
-                        exchanged
-                      </Link>{' '}
-                      for an <code className="text-xs">access_token</code>. This
-                      token provides secure access to the patient&apos;s FHIR
-                      resources through Flexpa&apos;s API.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="grid gap-4">
-                  <div className="grid grid-cols-[160px_1fr] gap-4 items-center">
-                    <div className="text-sm font-medium text-muted-foreground">
-                      Authorization ID
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <code className="flex-1 relative rounded bg-muted px-3 py-2 font-mono text-sm">
-                        {decoded.sub}
-                      </code>
-                      <CopyButton value={decoded.sub} />
-                    </div>
-
-                    <div className="text-sm font-medium text-muted-foreground">
-                      Patient ID
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <code className="flex-1 relative rounded bg-muted px-3 py-2 font-mono text-sm">
-                        {decoded.patient}
-                      </code>
-                      <CopyButton value={decoded.patient} />
-                    </div>
-
-                    <div className="text-sm font-medium text-muted-foreground">
-                      Access Token
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="flex-1 relative rounded bg-muted px-3 py-2">
-                        <AccessTokenDisplay token={token.accessToken} />
-                      </div>
-                      <CopyButton value={token.accessToken} />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          {/* Consent Card */}
+          <ConsentCard
+            consentId={decoded.sub}
+            accessToken={token.accessToken}
+            patientAuthorizations={consentData?.patientAuthorizations ?? []}
+          />
 
           {/* API Explorer Card */}
           <Card>
