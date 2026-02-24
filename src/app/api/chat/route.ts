@@ -6,35 +6,7 @@ import { getSession } from '@/lib/session';
 import { coverageDetails } from '@/lib/viewDefinitions/coverageDetails';
 import { eobDetailsUnified } from '@/lib/viewDefinitions/eobDetailsUnified';
 import { patientDetails } from '@/lib/viewDefinitions/patientDetails';
-
-async function runViewDefinition(
-  accessToken: string,
-  viewDefinition: Record<string, unknown>,
-) {
-  const response = await fetch(
-    'https://api.flexpa.com/fhir/ViewDefinition/$run',
-    {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        resourceType: 'Parameters',
-        parameter: [{ name: 'viewResource', resource: viewDefinition }],
-      }),
-    },
-  );
-  if (!response.ok) {
-    const errorText = await response.text();
-    console.error(
-      `ViewDefinition/$run failed (${response.status}):`,
-      errorText,
-    );
-    return { error: `API returned ${response.status}`, details: errorText };
-  }
-  return response.json();
-}
+import { runViewDefinition } from '@/lib/viewDefinitions/runViewDefinition';
 
 export async function POST(req: Request) {
   const session = await getSession();
