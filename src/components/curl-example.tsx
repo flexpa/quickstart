@@ -24,11 +24,13 @@ export function CurlExample({ method, url, body }: CurlExampleProps) {
   };
 
   return (
-    <div className="flex items-center gap-2 bg-muted rounded-md p-3">
-      <pre className="flex-1 text-xs font-mono whitespace-pre-wrap">
+    <div className="relative bg-muted rounded-md p-3">
+      <div className="absolute right-2 top-2 z-10">
+        <CopyButton value={getCurlCommand()} />
+      </div>
+      <pre className="text-xs font-mono whitespace-pre-wrap pr-12">
         {getCurlCommand()}
       </pre>
-      <CopyButton value={getCurlCommand()} />
     </div>
   );
 }

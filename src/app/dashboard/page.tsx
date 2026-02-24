@@ -7,6 +7,7 @@ import { ApiRequests } from '@/components/api-requests';
 import { ConsentCard } from '@/components/consent-card';
 import { CopyButton } from '@/components/copy-button';
 import MedplumSync from '@/components/medplum-sync';
+import { ParsedRecords } from '@/components/parsed-records';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { fetchConsent } from '@/lib/consent';
 import { decrypt } from '@/lib/session';
@@ -55,6 +56,31 @@ export default async function Dashboard() {
             patientAuthorizations={consentData?.patientAuthorizations ?? []}
             patientAuthorizationsError={consentData === null}
           />
+
+          {/* Parsed Records Card */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>Parsed Records</CardTitle>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    <Link
+                      href="https://www.flexpa.com/docs/guides/parsing-fhir"
+                      className="underline"
+                    >
+                      ViewDefinitions
+                    </Link>{' '}
+                    transform complex FHIR resources into flat, tabular data
+                    &mdash; no parsing code required. Select a ViewDefinition
+                    below and run it against the patient&apos;s data.
+                  </p>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <ParsedRecords />
+            </CardContent>
+          </Card>
 
           {/* API Explorer Card */}
           <Card>
