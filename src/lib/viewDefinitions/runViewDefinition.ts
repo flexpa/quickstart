@@ -17,14 +17,13 @@ export async function runViewDefinition(
     },
   );
   if (!response.ok) {
-    const errorText = await response.text();
+    await response.text();
     console.error(
       `ViewDefinition/$run failed: ${response.status} ${response.statusText}`,
     );
     return {
       error: `API returned ${response.status}`,
       status: response.status,
-      details: errorText,
     };
   }
   return response.json();
