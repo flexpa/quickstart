@@ -53,6 +53,7 @@ export default async function Dashboard() {
             consentId={decoded.sub}
             accessToken={token.accessToken}
             patientAuthorizations={consentData?.patientAuthorizations ?? []}
+            patientAuthorizationsError={consentData === null}
           />
 
           {/* API Explorer Card */}

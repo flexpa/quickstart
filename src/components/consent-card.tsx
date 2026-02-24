@@ -67,12 +67,14 @@ interface ConsentCardProps {
   consentId: string;
   accessToken: string;
   patientAuthorizations: PatientAuthorizationResponse[];
+  patientAuthorizationsError?: boolean;
 }
 
 export function ConsentCard({
   consentId,
   accessToken,
   patientAuthorizations,
+  patientAuthorizationsError,
 }: ConsentCardProps) {
   return (
     <Card>
@@ -119,8 +121,16 @@ export function ConsentCard({
 
           <div>
             <h4 className="text-sm font-medium mb-3">
-              Patient Authorizations ({patientAuthorizations.length})
+              Patient Authorizations{' '}
+              {!patientAuthorizationsError &&
+                `(${patientAuthorizations.length})`}
             </h4>
+            {patientAuthorizationsError && (
+              <p className="text-sm text-muted-foreground rounded-lg border border-dashed p-4">
+                Unable to load patient authorizations. The consent API may be
+                unavailable.
+              </p>
+            )}
             <Accordion type="multiple" className="space-y-3">
               {patientAuthorizations.map((pa) => (
                 <AccordionItem
@@ -131,7 +141,7 @@ export function ConsentCard({
                   <AccordionTrigger className="px-4 hover:no-underline">
                     <div className="flex items-center gap-2">
                       <span className="font-medium">
-                        {pa.endpoint?.label[0] ?? 'Unknown Endpoint'}
+                        {pa.endpoint?.label?.[0] ?? 'Unknown Endpoint'}
                       </span>
                       <StateBadge state={pa.state} />
                       {pa.type && (
