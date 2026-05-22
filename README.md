@@ -33,6 +33,8 @@ You must generate a random value for `SESSION_SECRET` in `.env`. One way is to u
 openssl rand -base64 32
 ```
 
+Create your API keys at [portal.flexpa.com](https://portal.flexpa.com) and copy the publishable and secret keys into `.env`. Then back in the Flexpa portal, click application settings and register `http://localhost:3000/callback` as an allowed redirect URI.
+
 ## Development
 
 To run the project:
