@@ -15,6 +15,7 @@ export async function startOAuthFlow() {
     redirectUri: env.redirectUri,
     codeChallenge,
     externalId: crypto.randomUUID(),
+    _experimentalParams: { flexpa_search_mode: 'true' },
   });
 
   return authUrl;
