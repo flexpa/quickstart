@@ -12,7 +12,7 @@
     "@ai-sdk/anthropic": "^3.0.46",
     "@ai-sdk/openai": "^3.0.30",
     "@ai-sdk/react": "^3.0.99",
-    "@flexpa/node-sdk": "^1.0.0",
+    "@flexpa/node-sdk": "^2.0.0",
     "@medplum/core": "^3.3.0",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-scroll-area": "^1.2.10",
