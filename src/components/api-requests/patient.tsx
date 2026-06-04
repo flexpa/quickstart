@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { handleCopyJson } from '@/components/api-requests';
+import { EmptyResults } from '@/components/api-requests/empty-results';
 import { CurlExample } from '@/components/curl-example';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -86,7 +87,7 @@ export default function PatientRequest() {
         </Button>
       )}
 
-      {patientData && (
+      {patientData?.resourceType === 'Patient' && (
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <h3 className="font-semibold">Response Overview</h3>
@@ -203,6 +204,14 @@ export default function PatientRequest() {
             </TabsContent>
           </Tabs>
         </div>
+      )}
+
+      {patientData && patientData.resourceType !== 'Patient' && (
+        <EmptyResults
+          message="No patient record found."
+          onRetry={handlePatientRequest}
+          isLoading={isLoading}
+        />
       )}
     </div>
   );

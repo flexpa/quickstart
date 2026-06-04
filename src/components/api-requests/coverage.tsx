@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { handleCopyJson } from '@/components/api-requests';
+import { EmptyResults } from '@/components/api-requests/empty-results';
 import { CurlExample } from '@/components/curl-example';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -190,6 +191,14 @@ export default function CoverageRequest() {
             </TabsContent>
           </Tabs>
         </div>
+      )}
+
+      {coverageData && !coverageData.entry?.length && (
+        <EmptyResults
+          message="No insurance plans found."
+          onRetry={handleCoverageRequest}
+          isLoading={isLoading}
+        />
       )}
     </div>
   );
