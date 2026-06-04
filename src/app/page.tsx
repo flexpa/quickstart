@@ -37,9 +37,11 @@ export default function Home() {
               <CardTitle className="text-xl">Search</CardTitle>
               <CardDescription>
                 The patient searches by health plan, provider, or facility and
-                connects to each one directly. They can link several sources in
-                a single session, with no identity verification step. Best when
-                they already know where their records live.
+                connects to each one directly across health insurer (CMS-9115)
+                and medical record system (ONC (g)(10)) networks. They can link
+                several sources in a single session, with no identity
+                verification step. Best when they already know where their
+                records live.
               </CardDescription>
             </CardHeader>
             <CardFooter className="mt-auto">
@@ -57,9 +59,10 @@ export default function Home() {
               </CardTitle>
               <CardDescription>
                 The patient verifies their identity once with CLEAR, ID.me, or
-                Persona. Flexpa then automatically finds and connects their
-                records across tens of thousands of facilities nationwide. Best
-                for broad coverage without hunting down each source.
+                Persona. Flexpa then uses the TEFCA nationwide network (via the
+                CommonWell and Kno2 QHINs) to automatically find and connect
+                their records across tens of thousands of facilities. Best for
+                broad coverage without hunting down each source.
               </CardDescription>
             </CardHeader>
             <CardFooter className="mt-auto">
