@@ -1,6 +1,6 @@
 'use client';
 
-import type { Bundle, FhirResource } from 'fhir/r4';
+import type { Bundle, DocumentReference, FhirResource } from 'fhir/r4';
 import {
   ArrowRight,
   Check,
@@ -13,11 +13,20 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { handleCopyJson } from '@/components/api-requests';
+import { DocumentAttachments } from '@/components/api-requests/document-attachment';
+import { EmptyResults } from '@/components/api-requests/empty-results';
 import { CurlExample } from '@/components/curl-example';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
@@ -43,9 +52,7 @@ const getResourceInfo = (bundle: Bundle): ResourceInfo[] => {
     const info = resourceMap.get(resource.resourceType);
     if (info) {
       info.count++;
-      if (info.examples.length < 3) {
-        info.examples.push(resource);
-      }
+      info.examples.push(resource);
     } else {
       resourceMap.set(resource.resourceType, {
         count: 1,
@@ -199,33 +206,70 @@ export default function Everything() {
                     )}
                   </Button>
                   {selectedResource.examples.length > 1 && (
-                    <div className="flex gap-1">
-                      {selectedResource.examples.map((example, idx) => (
-                        <Button
-                          key={`example-${example.resourceType}-${idx}`}
-                          variant={
-                            selectedExample === idx ? 'secondary' : 'ghost'
-                          }
-                          size="sm"
-                          onClick={() => setSelectedExample(idx)}
-                        >
-                          #{idx + 1}
-                        </Button>
-                      ))}
-                    </div>
+                    <Select
+                      value={String(selectedExample)}
+                      onValueChange={(value) =>
+                        setSelectedExample(Number(value))
+                      }
+                    >
+                      <SelectTrigger className="w-[200px] font-mono text-xs">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {selectedResource.examples.map((example, idx) => (
+                          <SelectItem
+                            key={`example-${example.resourceType}-${idx}`}
+                            value={String(idx)}
+                            className="font-mono text-xs"
+                          >
+                            #{idx + 1}
+                            {example.id ? `  ${example.id}` : ''}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   )}
                 </div>
               </div>
             </div>
-            <ScrollArea className="h-[500px] rounded-md border p-4">
-              <pre className="text-sm font-mono whitespace-pre-wrap">
-                {JSON.stringify(
-                  selectedResource.examples[selectedExample],
-                  null,
-                  2,
-                )}
-              </pre>
-            </ScrollArea>
+            {selectedResource.type === 'DocumentReference' ? (
+              <Tabs defaultValue="document" className="w-full">
+                <TabsList>
+                  <TabsTrigger value="document">Document</TabsTrigger>
+                  <TabsTrigger value="json">Resource</TabsTrigger>
+                </TabsList>
+                <TabsContent value="document" className="mt-3">
+                  <DocumentAttachments
+                    document={
+                      selectedResource.examples[
+                        selectedExample
+                      ] as DocumentReference
+                    }
+                  />
+                </TabsContent>
+                <TabsContent value="json" className="mt-3">
+                  <ScrollArea className="h-[460px] rounded-md border p-4">
+                    <pre className="text-sm font-mono whitespace-pre-wrap">
+                      {JSON.stringify(
+                        selectedResource.examples[selectedExample],
+                        null,
+                        2,
+                      )}
+                    </pre>
+                  </ScrollArea>
+                </TabsContent>
+              </Tabs>
+            ) : (
+              <ScrollArea className="h-[500px] rounded-md border p-4">
+                <pre className="text-sm font-mono whitespace-pre-wrap">
+                  {JSON.stringify(
+                    selectedResource.examples[selectedExample],
+                    null,
+                    2,
+                  )}
+                </pre>
+              </ScrollArea>
+            )}
           </div>
         )}
       </div>
@@ -265,7 +309,7 @@ export default function Everything() {
         </Button>
       )}
 
-      {everythingData && (
+      {everythingData?.entry?.length ? (
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <h3 className="font-semibold">Response Overview</h3>
@@ -326,7 +370,13 @@ export default function Everything() {
             </TabsContent>
           </Tabs>
         </div>
-      )}
+      ) : everythingData ? (
+        <EmptyResults
+          message="No records returned."
+          onRetry={handleEverythingRequest}
+          isLoading={isLoading}
+        />
+      ) : null}
     </div>
   );
 }

@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { handleCopyJson } from '@/components/api-requests';
+import { EmptyResults } from '@/components/api-requests/empty-results';
 import { CurlExample } from '@/components/curl-example';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -196,6 +197,14 @@ export default function EobRequest() {
             </TabsContent>
           </Tabs>
         </div>
+      )}
+
+      {eobData && !eobData.entry?.length && (
+        <EmptyResults
+          message="No claims found."
+          onRetry={handleEobRequest}
+          isLoading={isLoading}
+        />
       )}
     </div>
   );
