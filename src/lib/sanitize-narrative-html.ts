@@ -39,6 +39,9 @@ const ALLOWED_ATTR = [
 ];
 
 // target=_blank links need rel=noopener noreferrer; DOMPurify won't add it for us.
+// Registered once on the default singleton at module load. This is the only
+// DOMPurify usage in the app, so the global hook is fine; if another caller is
+// added with different needs, move to a dedicated instance via createDOMPurify.
 DOMPurify.addHook('afterSanitizeAttributes', (node) => {
   if (node.tagName === 'A' && node.getAttribute('target') === '_blank') {
     node.setAttribute('rel', 'noopener noreferrer');

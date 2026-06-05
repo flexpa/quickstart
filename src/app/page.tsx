@@ -16,6 +16,7 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
 
   async function handleConnect(flow: ConsentFlow) {
+    setError(null);
     try {
       const authUrl = await startOAuthFlow(flow);
       window.location.href = authUrl;
@@ -83,7 +84,11 @@ export default function Home() {
           </Card>
         </div>
 
-        {error && <p className="text-red-600 mt-6 text-sm">{error}</p>}
+        {error && (
+          <p role="alert" className="text-red-600 mt-6 text-sm">
+            {error}
+          </p>
+        )}
       </div>
     </div>
   );
