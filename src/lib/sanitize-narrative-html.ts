@@ -1,6 +1,4 @@
-// Allowlist-based sanitizer for FHIR/C-CDA narrative HTML, delegated to
-// DOMPurify so the narrative can be rendered with dangerouslySetInnerHTML.
-// Browser-only (DOMPurify relies on the DOM).
+// Allowlist sanitizer for FHIR/C-CDA narrative HTML, via DOMPurify. Browser-only.
 
 import DOMPurify from 'dompurify';
 
@@ -38,16 +36,21 @@ const ALLOWED_ATTR = [
   'scope',
 ];
 
-// target=_blank links need rel=noopener noreferrer; DOMPurify won't add it for us.
-// Registered once on the default singleton at module load. This is the only
-// DOMPurify usage in the app, so the global hook is fine; if another caller is
-// added with different needs, move to a dedicated instance via createDOMPurify.
-DOMPurify.addHook('afterSanitizeAttributes', (node) => {
-  if (node.tagName === 'A' && node.getAttribute('target') === '_blank') {
-    node.setAttribute('rel', 'noopener noreferrer');
-  }
-});
+// Add rel=noopener to target=_blank links. Registered lazily, not at module
+// load: DOMPurify isn't DOM-bound during SSR, where this module still evaluates.
+let hookRegistered = false;
+
+function ensureHook(): void {
+  if (hookRegistered) return;
+  hookRegistered = true;
+  DOMPurify.addHook('afterSanitizeAttributes', (node) => {
+    if (node.tagName === 'A' && node.getAttribute('target') === '_blank') {
+      node.setAttribute('rel', 'noopener noreferrer');
+    }
+  });
+}
 
 export function sanitizeNarrativeHtml(html: string): string {
+  ensureHook();
   return DOMPurify.sanitize(html, { ALLOWED_TAGS, ALLOWED_ATTR });
 }
