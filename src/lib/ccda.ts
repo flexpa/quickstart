@@ -104,10 +104,9 @@ export function parseCcda(xml: string): CcdaDocument {
       },
     );
 
-    const orderedSections = sections
-      .map((section, position) => ({ ...section, position }))
-      .sort((a, b) => a.title.localeCompare(b.title))
-      .map(({ position: _position, ...section }) => section);
+    const orderedSections = [...sections].sort((a, b) =>
+      a.title.localeCompare(b.title),
+    );
 
     return { title, sections: orderedSections };
   } catch {

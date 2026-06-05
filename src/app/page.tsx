@@ -1,6 +1,7 @@
 'use client';
 
 import { ExternalLink, Search, ShieldCheck } from 'lucide-react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -12,9 +13,18 @@ import {
 import { type ConsentFlow, startOAuthFlow } from '@/lib/oauth';
 
 export default function Home() {
+  const [error, setError] = useState<string | null>(null);
+
   async function handleConnect(flow: ConsentFlow) {
-    const authUrl = await startOAuthFlow(flow);
-    window.location.href = authUrl;
+    try {
+      const authUrl = await startOAuthFlow(flow);
+      window.location.href = authUrl;
+    } catch (err) {
+      console.error('Failed to start OAuth flow', err);
+      setError(
+        "Couldn't start the connection. Check your Flexpa keys and try again.",
+      );
+    }
   }
 
   return (
@@ -72,6 +82,8 @@ export default function Home() {
             </CardFooter>
           </Card>
         </div>
+
+        {error && <p className="text-red-600 mt-6 text-sm">{error}</p>}
       </div>
     </div>
   );
