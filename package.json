@@ -23,7 +23,7 @@
     "ai": "^6.0.97",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "dompurify": "^3.4.8",
+    "dompurify": "^3.4.9",
     "jose": "^5.10.0",
     "lucide-react": "^0.454.0",
     "next": "^15.5.18",
