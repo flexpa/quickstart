@@ -9,9 +9,9 @@
     "format": "biome check --write ."
   },
   "dependencies": {
-    "@ai-sdk/anthropic": "^3.0.46",
-    "@ai-sdk/openai": "^3.0.30",
-    "@ai-sdk/react": "^3.0.99",
+    "@ai-sdk/anthropic": "^3.0.116",
+    "@ai-sdk/openai": "^3.0.109",
+    "@ai-sdk/react": "^3.0.280",
     "@flexpa/node-sdk": "^2.0.0",
     "@medplum/core": "^5.1.6",
     "@radix-ui/react-accordion": "^1.2.12",
@@ -20,7 +20,7 @@
     "@radix-ui/react-separator": "^1.1.8",
     "@radix-ui/react-slot": "^1.2.4",
     "@radix-ui/react-tabs": "^1.1.13",
-    "ai": "^6.0.97",
+    "ai": "^6.0.277",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dompurify": "^3.4.13",
