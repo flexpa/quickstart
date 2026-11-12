@@ -6,6 +6,26 @@ This quickstart showcases how to obtain a patient's claims history from a health
 
 ![Flexpa quickstart app](/public/quickstart.png)
 
+## Use Flexpa with AI agents (MCP)
+
+Flexpa runs two MCP servers.
+
+**Connect your own records to Claude or ChatGPT.** Add `https://api.flexpa.com/mcp/consent` as a custom connector in Claude or as a custom MCP app in a supported ChatGPT account, then authorize through Flexpa Consent. Sign in to a supported health plan or patient portal, or verify your identity (IAL2) to search the national exchange (TEFCA Individual Access Services). Your assistant can then query the records from the sources you connected. Free for patients.
+
+In Claude Code:
+
+```bash
+claude mcp add flexpa --transport http https://api.flexpa.com/mcp/consent
+```
+
+**Health tools for agents.** `https://api.flexpa.com/mcp` is a public registry agents use to discover health MCP servers and Flexpa's Endpoint Directory: search and validation of payer and provider endpoints, including plan type support and the authentication flow each one uses. Streamable HTTP, no authentication.
+
+This quickstart's `/chat` agent uses the same Consent MCP server: it connects to `/mcp/consent` with the patient access token from Flexpa Link and gets Flexpa's patient records tools (see [Health Records Agent](#health-records-agent-optional)).
+
+- Setup guide: [Connect your health records to Claude or ChatGPT](https://www.flexpa.com/connect-health-records-to-ai)
+- Docs: [Health records for agents](https://www.flexpa.com/docs/guides/agents) and [Health tools for agents](https://www.flexpa.com/docs/guides/mcp-registry)
+- Building a product: [Patient access API](https://www.flexpa.com/patient-access-api) (one FHIR R4 API for insurer, EHR and TEFCA records)
+
 ## Prerequisites
 
 The quickstart assumes you have [Node.js and npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) already installed. The project is built on Next.js.
@@ -51,7 +71,7 @@ The application will be available at [http://localhost:3000](http://localhost:30
 
 ## Health Records Agent (Optional)
 
-The quickstart includes an AI-powered chat assistant at `/chat` that can answer questions about a patient's claims, demographics, and insurance coverage.
+The quickstart includes an AI-powered chat assistant at `/chat` that can answer questions about a patient's claims, demographics, and insurance coverage. It connects to the [Flexpa Consent MCP server](https://www.flexpa.com/docs/guides/agents) (`https://api.flexpa.com/mcp/consent`) with the patient access token from Flexpa Link, so the agent gets Flexpa's patient records tools alongside the local `search_records`, `search_patient` and `search_coverage` tools. If the MCP server can't be reached, the agent falls back to the local tools.
 
 To enable it, add an API key to your `.env` file for at least one provider:
 
