@@ -17,6 +17,7 @@ const FLEXPA_CONSENT_MCP_URL = 'https://api.flexpa.com/mcp/consent';
 // How long to wait for the MCP server before falling back to the local tools.
 const MCP_CONNECT_TIMEOUT_MS = 5_000;
 const MCP_TOOLS_TIMEOUT_MS = 5_000;
+const MCP_CLOSE_TIMEOUT_MS = 5_000;
 
 function withTimeout<T>(promise: Promise<T>, ms: number, label: string) {
   let timer: ReturnType<typeof setTimeout> | undefined;
@@ -49,7 +50,11 @@ export async function POST(req: Request) {
     if (mcpClosed || !mcpClient) return;
     mcpClosed = true;
     try {
-      await mcpClient.close();
+      await withTimeout(
+        mcpClient.close(),
+        MCP_CLOSE_TIMEOUT_MS,
+        'Flexpa Consent MCP close',
+      );
     } catch (error) {
       console.error('Failed to close Flexpa Consent MCP client', error);
     }
