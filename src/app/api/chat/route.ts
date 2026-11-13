@@ -14,6 +14,21 @@ import { runViewDefinition } from '@/lib/viewDefinitions/runViewDefinition';
 // Docs: https://www.flexpa.com/docs/guides/agents
 const FLEXPA_CONSENT_MCP_URL = 'https://api.flexpa.com/mcp/consent';
 
+// How long to wait for the MCP server before falling back to the local tools.
+const MCP_CONNECT_TIMEOUT_MS = 5_000;
+const MCP_TOOLS_TIMEOUT_MS = 5_000;
+
+function withTimeout<T>(promise: Promise<T>, ms: number, label: string) {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const timeout = new Promise<never>((_, reject) => {
+    timer = setTimeout(
+      () => reject(new Error(`${label} timed out after ${ms}ms`)),
+      ms,
+    );
+  });
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
+}
+
 export async function POST(req: Request) {
   const session = await getSession();
   if (!session?.accessToken) {
@@ -24,8 +39,22 @@ export async function POST(req: Request) {
 
   // Connect to the Flexpa Consent MCP server with the patient access token.
   // If it can't be reached, the agent still runs with the local tools below.
+  // Both steps have a deadline, so a stalled server can't hold up the chat.
   let mcpClient: MCPClient | undefined;
   let mcpTools: Awaited<ReturnType<MCPClient['tools']>> = {};
+
+  // Close the MCP client exactly once, whatever happens to the request.
+  let mcpClosed = false;
+  const closeMcpClient = async () => {
+    if (mcpClosed || !mcpClient) return;
+    mcpClosed = true;
+    try {
+      await mcpClient.close();
+    } catch (error) {
+      console.error('Failed to close Flexpa Consent MCP client', error);
+    }
+  };
+
   try {
     mcpClient = await createMCPClient({
       transport: {
@@ -33,15 +62,24 @@ export async function POST(req: Request) {
         url: FLEXPA_CONSENT_MCP_URL,
         headers: { Authorization: `Bearer ${session.accessToken}` },
       },
+      // Bounds transport startup and the initialize request.
+      initializationOptions: {
+        signal: AbortSignal.timeout(MCP_CONNECT_TIMEOUT_MS),
+      },
     });
-    mcpTools = await mcpClient.tools();
+    mcpTools = await withTimeout(
+      mcpClient.tools(),
+      MCP_TOOLS_TIMEOUT_MS,
+      'Flexpa Consent MCP tool discovery',
+    );
   } catch (error) {
     console.error(
       'Flexpa Consent MCP unavailable, using local tools only',
       error,
     );
-    await mcpClient?.close();
+    await closeMcpClient();
     mcpClient = undefined;
+    mcpTools = {};
   }
 
   const agent = new ToolLoopAgent({
@@ -74,13 +112,17 @@ export async function POST(req: Request) {
           runViewDefinition(session.accessToken, coverageDetails),
       }),
     },
-    onFinish: async () => {
-      await mcpClient?.close();
-    },
   });
 
-  return createAgentUIStreamResponse({
-    agent,
-    uiMessages: messages,
-  });
+  try {
+    return await createAgentUIStreamResponse({
+      agent,
+      uiMessages: messages,
+      // Runs when the stream ends: finished, errored or aborted.
+      onFinish: closeMcpClient,
+    });
+  } catch (error) {
+    await closeMcpClient();
+    throw error;
+  }
 }
