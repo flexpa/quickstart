@@ -77,6 +77,8 @@ claude mcp add flexpa \
   https://api.flexpa.com/mcp/consent
 ```
 
+Then run `/mcp` in Claude Code and complete the browser sign-in for `flexpa`.
+
 More on building with patient records and AI:
 
 - [Health records MCP server](https://www.flexpa.com/health-records-mcp-server): tools, resources and auth
