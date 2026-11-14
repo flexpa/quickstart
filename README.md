@@ -67,6 +67,26 @@ The chat route at `src/app/api/chat/route.ts` uses Anthropic by default. You can
 
 This is a minimal implementation to demonstrate the concept — in production, you would likely add more tools, refine the system prompt, implement guardrails, and tailor the agent to your specific use case.
 
+## Health records for your own AI agent
+
+The chat route above is one way to put claims in front of a model. Flexpa also runs a hosted MCP server, so an agent like Claude Code can query a patient's records directly after they authorize through Flexpa Consent:
+
+```bash
+claude mcp add flexpa \
+  --transport http \
+  https://api.flexpa.com/mcp/consent
+```
+
+Then run `/mcp` in Claude Code and complete the browser sign-in for `flexpa`.
+
+More on building with patient records and AI:
+
+- [Health records MCP server](https://www.flexpa.com/health-records-mcp-server): tools, resources and auth
+- [Set up health records for an AI assistant](https://www.flexpa.com/docs/guides/agents) (docs)
+- [Claims data and AI](https://www.flexpa.com/docs/additional-resources/claims-and-ai) (docs)
+- [FHIR claims API](https://www.flexpa.com/fhir-claims-api) and [Patient Access API](https://www.flexpa.com/patient-access-api)
+- [Health data API sandbox](https://www.flexpa.com/health-data-api-sandbox)
+
 ## Testing
 
 To test the quickstart app: 
